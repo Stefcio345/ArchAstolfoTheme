@@ -1,10 +1,23 @@
+# Ignore everything
 *
 
+# But not .gitignore
 !.gitignore
-!hypr/*
-!zsh/*
-!scripts/*
-!kitty/*
-!micro/*
-!thunar/*
-!eza/*
+
+# Unignore directories
+!hypr/
+!zsh/
+!scripts/
+!kitty/
+!micro/
+!thunar/
+!eza/
+
+# Unignore their contents
+!hypr/**
+!zsh/**
+!scripts/**
+!kitty/**
+!micro/**
+!thunar/**
+!eza/**
