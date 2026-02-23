@@ -1,0 +1,10 @@
+*
+
+!.gitignore
+!hypr/
+!zsh/
+!scripts/
+!kitty/
+!micro/
+!thunar/
+!eza/
