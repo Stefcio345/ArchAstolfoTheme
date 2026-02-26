@@ -1,0 +1,8 @@
+- [ ] Quickshell implementation
+- [ ] wi-fi widget
+- [ ] bluetooth widget
+- [ ] calendar widget
+- [ ] AI widget
+- [ ] Micro keybinds
+- [ ] change System theme to match
+- [ ] Wallpaper select
