@@ -1,0 +1,259 @@
+/* =========================================================
+   PINK SOFT-GLOW THEME — cohesive, no blue, subtle motion
+   ========================================================= */
+
+/* ================= CORE PALETTE ================= */
+
+@define-color window_bg_color #111118;
+@define-color surface_1 #151521;
+@define-color surface_2 #1b1b29;
+@define-color surface_3 #202033;
+
+@define-color accent_bg_color #ff8fb8;
+@define-color accent_soft_color #ffb3d1;
+@define-color accent_dim_color #e06c9f;
+
+@define-color theme_fg_color #f2edf7;
+@define-color muted_fg_color #b8b0c6;
+@define-color subtle_fg_color #7e7894;
+
+/* Kill GTK blue everywhere */
+@define-color theme_selected_bg_color @accent_bg_color;
+@define-color theme_selected_fg_color #1a0f16;
+@define-color link_color @accent_bg_color;
+@define-color visited_link_color @accent_dim_color;
+
+/* ================= SEMANTIC ================= */
+
+@define-color success_bg_color #6ee7b7;
+@define-color warning_bg_color #ffd166;
+@define-color error_bg_color #ff6b81;
+@define-color info_bg_color #8ab4ff;
+
+@define-color error_fg_color #1a0f16;
+
+/* ================= GLOBAL ================= */
+
+* {
+  color: @theme_fg_color;
+}
+
+*:selected,
+selection,
+.view:selected,
+row:selected,
+label:selected {
+  background-color: alpha(@accent_bg_color, 0.22);
+  color: @theme_fg_color;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes soft-glow {
+  0% {
+    box-shadow: 0 0 30px alpha(@accent_bg_color, 0.12);
+  }
+  50% {
+    box-shadow: 0 0 50px alpha(@accent_bg_color, 0.22);
+  }
+  100% {
+    box-shadow: 0 0 30px alpha(@accent_bg_color, 0.12);
+  }
+}
+
+/* ================= MAIN WRAPPER ================= */
+
+.box-wrapper {
+  background: linear-gradient(
+    180deg,
+    #141420 0%,
+    #101018 100%
+  );
+
+  padding: 22px;
+  border-radius: 20px;
+  border: 4px solid alpha(@accent_bg_color, 0.55);
+
+  box-shadow:
+    0 0 40px alpha(@accent_bg_color, 0.18),
+    0 0 80px alpha(@accent_bg_color, 0.08);
+}
+
+/* ================= POPOVER ================= */
+
+popover {
+  background: @surface_1;
+  border: 1px solid alpha(@accent_bg_color, 0.45);
+  border-radius: 16px;
+  padding: 12px;
+
+  box-shadow: 0 0 30px alpha(@accent_bg_color, 0.15);
+}
+
+/* ================= INPUT ================= */
+
+.input {
+  caret-color: @accent_bg_color;
+  background: @surface_2;
+  padding: 12px;
+  border-radius: 14px;
+  border: 2px solid alpha(@accent_bg_color, 0.25);
+  outline: none;
+  font-size: 18px;
+  font-weight: bold;
+  
+  transition:
+    border 140ms ease,
+    box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.input:hover {
+  border: 1px solid alpha(@accent_soft_color, 0.5);
+  background: @surface_3;
+}
+
+.input:focus,
+.input:active {
+  border: 1px solid @accent_bg_color;
+  box-shadow:
+    0 0 0 1px alpha(@accent_bg_color, 0.2) inset,
+    0 0 22px alpha(@accent_bg_color, 0.2);
+}
+
+.input selection {
+  background: alpha(@accent_bg_color, 0.35);
+  color: #1a0f16;
+}
+
+/* ================= BUTTONS ================= */
+
+button,
+.button {
+  background: alpha(@accent_bg_color, 0.08);
+  border: 1px solid alpha(@accent_bg_color, 0.4);
+  border-radius: 12px;
+
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease,
+    transform 120ms ease;
+}
+
+button:hover,
+.button:hover {
+  background: alpha(@accent_bg_color, 0.16);
+  box-shadow: 0 0 12px alpha(@accent_bg_color, 0.25);
+  transform: translateY(-1px);
+}
+
+button:active {
+  background: alpha(@accent_bg_color, 0.25);
+  transform: translateY(0);
+}
+
+/* ================= LIST ================= */
+
+.list {
+  background-color: alpha(@accent_bg_color, 0.06);
+  border-radius: 14px;
+}
+
+/* ================= LIST ITEMS ================= */
+
+.item-box {
+  border-radius: 12px;
+  padding: 12px;
+  background-color: transparent;
+
+  transition:
+    transform 120ms ease,
+    background 120ms ease,
+    box-shadow 120ms ease;
+}
+
+child:hover .item-box {
+  background: alpha(@accent_soft_color, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+}
+
+child:selected .item-box,
+row:selected .item-box {
+  background: alpha(@accent_bg_color, 0.18);
+  border: 1px solid alpha(@accent_bg_color, 0.5);
+  box-shadow: 0 0 15px alpha(@accent_bg_color, 0.15);
+}
+
+/* ================= PREVIEW ================= */
+
+.preview {
+  border: 1px solid alpha(@accent_bg_color, 0.35);
+  border-radius: 14px;
+  background: @surface_1;
+}
+
+/* ================= KEYBINDS ================= */
+
+.keybinds {
+  padding-top: 12px;
+  border-top: 1px solid alpha(@accent_bg_color, 0.15);
+  font-size: 12px;
+  color: @muted_fg_color;
+}
+
+.keybind-label {
+  padding: 3px 7px;
+  border-radius: 8px;
+  border: 1px solid alpha(@accent_bg_color, 0.45);
+  background: alpha(@accent_bg_color, 0.08);
+}
+
+/* ================= SCROLLBARS ================= */
+
+scrollbar slider {
+  background: alpha(@accent_bg_color, 0.5);
+  border-radius: 10px;
+}
+
+scrollbar slider:hover {
+  background: @accent_bg_color;
+}
+
+scale slider {
+  background: @accent_bg_color;
+}
+
+scale trough {
+  background: alpha(@accent_bg_color, 0.15);
+}
+
+/* ================= STATES ================= */
+
+.error {
+  padding: 12px;
+  background: @error_bg_color;
+  color: @error_fg_color;
+  border-radius: 12px;
+}
+
+.success {
+  padding: 12px;
+  background: alpha(@success_bg_color, 0.2);
+  border: 1px solid alpha(@success_bg_color, 0.5);
+  border-radius: 12px;
+}
+
+.warning {
+  padding: 12px;
+  background: alpha(@warning_bg_color, 0.2);
+  border: 1px solid alpha(@warning_bg_color, 0.5);
+  border-radius: 12px;
+}
+
+.info {
+  padding: 12px;
+  background: alpha(@info_bg_color, 0.2);
+  border: 1px solid alpha(@info_bg_color, 0.5);
+  border-radius: 12px;
+}

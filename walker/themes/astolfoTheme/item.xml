@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"></requires>
+
+  <object class="GtkBox" id="ItemBox">
+    <style>
+      <class name="item-box"/>
+    </style>
+
+    <property name="orientation">horizontal</property>
+    <property name="spacing">14</property>
+    <property name="valign">center</property>
+    <property name="hexpand">true</property>
+
+    <!-- Icon container -->
+    <child>
+      <object class="GtkBox" id="ItemIconBox">
+        <property name="orientation">horizontal</property>
+        <property name="valign">center</property>
+        <property name="spacing">6</property>
+
+        <child>
+          <object class="GtkLabel" id="ItemImageFont">
+            <style>
+              <class name="item-image-text"/>
+            </style>
+            <property name="valign">center</property>
+            <property name="width-chars">2</property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkImage" id="ItemImage">
+            <style>
+              <class name="item-image"/>
+            </style>
+            <property name="valign">center</property>
+            <property name="icon-size">large</property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+    <!-- Text column -->
+    <child>
+      <object class="GtkBox" id="ItemTextBox">
+        <style>
+          <class name="item-text-box"/>
+        </style>
+
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <property name="hexpand">true</property>
+        <property name="valign">center</property>
+
+        <child>
+          <object class="GtkLabel" id="ItemText">
+            <style>
+              <class name="item-text"/>
+            </style>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkLabel" id="ItemSubtext">
+            <style>
+              <class name="item-subtext"/>
+            </style>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+    <!-- Quick activation badge -->
+    <child>
+      <object class="GtkLabel" id="QuickActivation">
+        <style>
+          <class name="item-quick-activation"/>
+        </style>
+        <property name="valign">center</property>
+        <property name="xalign">1</property>
+      </object>
+    </child>
+
+  </object>
+</interface>

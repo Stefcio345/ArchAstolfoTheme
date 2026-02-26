@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+
+  <object class="GtkBox" id="ItemBox">
+    <style>
+      <class name="item-box"/>
+    </style>
+
+    <property name="orientation">horizontal</property>
+    <property name="spacing">12</property>
+    <property name="margin-top">8</property>
+    <property name="margin-bottom">8</property>
+    <property name="margin-start">10</property>
+    <property name="margin-end">10</property>
+    <property name="valign">center</property>
+
+    <!-- Icon -->
+    <child>
+      <object class="GtkImage" id="ItemImage">
+        <style>
+          <class name="item-image"/>
+        </style>
+        <property name="pixel-size">44</property>
+        <property name="valign">center</property>
+        <property name="halign">center</property>
+      </object>
+    </child>
+
+    <!-- Text column -->
+    <child>
+      <object class="GtkBox" id="ItemTextBox">
+        <style>
+          <class name="item-text-box"/>
+        </style>
+
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <property name="hexpand">true</property>
+        <property name="valign">center</property>
+
+        <!-- Title -->
+        <child>
+          <object class="GtkLabel" id="ItemText">
+            <style>
+              <class name="item-text"/>
+            </style>
+
+            <property name="wrap">false</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0.5</property>
+            <property name="halign">fill</property>
+            <property name="hexpand">true</property>
+            <property name="ellipsize">end</property>
+            <property name="single-line-mode">true</property>
+          </object>
+        </child>
+
+        <!-- Subtitle -->
+        <child>
+          <object class="GtkLabel" id="ItemSubtext">
+            <style>
+              <class name="item-subtext"/>
+            </style>
+
+            <property name="wrap">true</property>
+            <property name="xalign">0</property>
+            <property name="yalign">0</property>
+            <property name="halign">fill</property>
+            <property name="hexpand">true</property>
+            <property name="ellipsize">end</property>
+            <property name="lines">2</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <!-- Right-side hint / keybind -->
+    <child>
+      <object class="GtkLabel" id="QuickActivation">
+        <style>
+          <class name="item-quick-activation"/>
+        </style>
+
+        <property name="wrap">false</property>
+        <property name="valign">center</property>
+        <property name="halign">end</property>
+        <property name="xalign">1</property>
+        <property name="yalign">0.5</property>
+        <property name="margin-start">10</property>
+        <property name="ellipsize">end</property>
+      </object>
+    </child>
+
+  </object>
+</interface>

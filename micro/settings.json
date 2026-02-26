@@ -1,0 +1,6 @@
+{
+    "clipboard": "terminal",
+    "filetype": {
+        "*.zsh-theme": "sh"
+    }
+}

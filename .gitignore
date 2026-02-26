@@ -12,6 +12,9 @@
 !micro/
 !thunar/
 !eza/
+!icons/
+!walker/
+!quickshell/
 
 # Unignore their contents
 !hypr/**
@@ -21,3 +24,6 @@
 !micro/**
 !thunar/**
 !eza/**
+!icons/**
+!walker/**
+!quickshell/**

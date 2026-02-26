@@ -1,102 +1,113 @@
 colourful: true
 
+# Palette (Astolfo pink -> light gray scale)
+# pink:        #ff77aa
+# pink_soft:   #edb7cb
+# gray_0:      #f4f4f5   # near-white
+# gray_1:      #e4e4e7
+# gray_2:      #cfcfd4
+# gray_3:      #b8b8bf
+# gray_4:      #9a9aa3
+# gray_5:      #6f6f78   # darkest used (still "gray", not black)
+
 filekinds:
-  normal: {foreground: "#e4e4e7"}
-  directory: {foreground: "#f38ba8"}      # accent pink
-  symlink: {foreground: "#bcd6f2"}
-  pipe: {foreground: "#40434d"}
-  block_device: {foreground: "#f5d7a8"}
-  char_device: {foreground: "#f5d7a8"}
-  socket: {foreground: "#40434d"}         # was too close to bg; make visible but muted
-  special: {foreground: "#cbd2ff"}
-  executable: {foreground: "#b8e0cc"}
-  mount_point: {foreground: "#f38ba8"}
+  normal:       {foreground: "#deadbf"}
+  directory:    {foreground: "#ff9fc2"}
+  symlink:      {foreground: "#cfcfd4"}
+  pipe:         {foreground: "#9a9aa3"}
+  block_device: {foreground: "#b8b8bf"}
+  char_device:  {foreground: "#b8b8bf"}
+  socket:       {foreground: "#9a9aa3"}
+  special:      {foreground: "#cfcfd4"}
+  executable:   {foreground: "#e4e4e7"}
+  mount_point:  {foreground: "#ff77aa"}
 
 perms:
-  user_read: {foreground: "#cfcfd4"}
-  user_write: {foreground: "#f5d7a8"}
-  user_execute_file: {foreground: "#b8e0cc"}
-  user_execute_other: {foreground: "#b8e0cc"}
-  group_read: {foreground: "#cfcfd4"}
-  group_write: {foreground: "#f5d7a8"}
-  group_execute: {foreground: "#b8e0cc"}
-  other_read: {foreground: "#40434d"}
-  other_write: {foreground: "#f5d7a8"}
-  other_execute: {foreground: "#b8e0cc"}
-  special_user_file: {foreground: "#cbd2ff"}  # slightly brighter than before
-  special_other: {foreground: "#40434d"}      # was too dark; keep muted but readable
-  attribute: {foreground: "#40434d"}
+  user_read:           {foreground: "#cfcfd4"}
+  user_write:          {foreground: "#ff9fc2"}
+  user_execute_file:   {foreground: "#e4e4e7"}
+  user_execute_other:  {foreground: "#e4e4e7"}
+  group_read:          {foreground: "#cfcfd4"}
+  group_write:         {foreground: "#b8b8bf"}
+  group_execute:       {foreground: "#e4e4e7"}
+  other_read:          {foreground: "#9a9aa3"}
+  other_write:         {foreground: "#b8b8bf"}
+  other_execute:       {foreground: "#cfcfd4"}
+  special_user_file:   {foreground: "#ff9fc2"}
+  special_other:       {foreground: "#9a9aa3"}
+  attribute:           {foreground: "#9a9aa3"}
 
 size:
-  major: {foreground: "#cfcfd4"}
-  minor: {foreground: "#bcd6f2"}
-  number_byte: {foreground: "#e4e4e7"}
-  number_kilo: {foreground: "#cfcfd4"}
-  number_mega: {foreground: "#cfcfd4"}
-  number_giga: {foreground: "#cbd2ff"}
-  number_huge: {foreground: "#f38ba8"}
-  unit_byte: {foreground: "#40434d"}
-  unit_kilo: {foreground: "#40434d"}
-  unit_mega: {foreground: "#40434d"}
-  unit_giga: {foreground: "#cbd2ff"}
-  unit_huge: {foreground: "#f38ba8"}
+  major:        {foreground: "#cfcfd4"}
+  minor:        {foreground: "#b8b8bf"}
+  number_byte:  {foreground: "#e4e4e7"}
+  number_kilo:  {foreground: "#cfcfd4"}
+  number_mega:  {foreground: "#cfcfd4"}
+  number_giga:  {foreground: "#b8b8bf"}
+  number_huge:  {foreground: "#ff77aa"}
+  unit_byte:    {foreground: "#9a9aa3"}
+  unit_kilo:    {foreground: "#9a9aa3"}
+  unit_mega:    {foreground: "#9a9aa3"}
+  unit_giga:    {foreground: "#b8b8bf"}
+  unit_huge:    {foreground: "#ff77aa"}
 
 users:
-  user_you: {foreground: "#e4e4e7"}
-  user_root: {foreground: "#f38ba8"}
-  user_other: {foreground: "#cfcfd4"}
-  group_yours: {foreground: "#cfcfd4"}
-  group_other: {foreground: "#40434d"}
-  group_root: {foreground: "#f38ba8"}
+  user_you:     {foreground: "#b8b8bf"}
+  user_root:    {foreground: "#ff77aa"}
+  user_other:   {foreground: "#cfcfd4"}
+  group_yours:  {foreground: "#cfcfd4"}
+  group_other:  {foreground: "#9a9aa3"}
+  group_root:   {foreground: "#ff77aa"}
 
 links:
-  normal: {foreground: "#bcd6f2"}
-  multi_link_file: {foreground: "#dbe9ff"}
+  normal:          {foreground: "#cfcfd4"}
+  multi_link_file: {foreground: "#e4e4e7"}
 
 git:
-  new: {foreground: "#b8e0cc"}
-  modified: {foreground: "#f5d7a8"}
-  deleted: {foreground: "#f38ba8"}
-  renamed: {foreground: "#bcd6f2"}
-  typechange: {foreground: "#cbd2ff"}
-  ignored: {foreground: "#40434d"}
-  conflicted: {foreground: "#ffb3c6"}      # keep the “panic pink”
+  new:        {foreground: "#e4e4e7"}
+  modified:   {foreground: "#ff9fc2"}
+  deleted:    {foreground: "#ff77aa"}
+  renamed:    {foreground: "#cfcfd4"}
+  typechange: {foreground: "#b8b8bf"}
+  ignored:    {foreground: "#9a9aa3"}
+  conflicted: {foreground: "#ff77aa"}  # panic pink stays pink
 
 git_repo:
-  branch_main: {foreground: "#e4e4e7"}
+  branch_main:  {foreground: "#e4e4e7"}
   branch_other: {foreground: "#cfcfd4"}
-  git_clean: {foreground: "#b8e0cc"}
-  git_dirty: {foreground: "#f38ba8"}
+  git_clean:    {foreground: "#e4e4e7"}
+  git_dirty:    {foreground: "#ff77aa"}
 
 security_context:
-  colon: {foreground: "#40434d"}
-  user: {foreground: "#cfcfd4"}
-  role: {foreground: "#cfcfd4"}
-  typ: {foreground: "#40434d"}            # was nearly bg; make it muted not invisible
-  range: {foreground: "#cbd2ff"}
+  colon: {foreground: "#9a9aa3"}
+  user:  {foreground: "#cfcfd4"}
+  role:  {foreground: "#cfcfd4"}
+  typ:   {foreground: "#9a9aa3"}
+  range: {foreground: "#b8b8bf"}
 
 file_type:
-  image: {foreground: "#f5d7a8"}
-  video: {foreground: "#f38ba8"}
-  music: {foreground: "#b8e0cc"}
-  lossless: {foreground: "#bcd6f2"}
-  crypto: {foreground: "#40434d"}
-  document: {foreground: "#e4e4e7"}
-  compressed: {foreground: "#cbd2ff"}
-  temp: {foreground: "#ffb3c6"}
-  compiled: {foreground: "#cbd2ff"}
-  build: {foreground: "#40434d"}
-  source: {foreground: "#cfcfd4"}
+  image:      {foreground: "#cfcfd4"}
+  video:      {foreground: "#ff77aa"}
+  music:      {foreground: "#e4e4e7"}
+  lossless:   {foreground: "#cfcfd4"}
+  crypto:     {foreground: "#9a9aa3"}
+  document:   {foreground: "#e4e4e7"}
+  compressed: {foreground: "#b8b8bf"}
+  temp:       {foreground: "#ff9fc2"}
+  compiled:   {foreground: "#b8b8bf"}
+  build:      {foreground: "#9a9aa3"}
+  source:     {foreground: "#cfcfd4"}
 
-punctuation: {foreground: "#40434d"}
-date: {foreground: "#f5d7a8"}
-inode: {foreground: "#40434d"}
-blocks: {foreground: "#40434d"}
-header: {foreground: "#e4e4e7"}
-octal: {foreground: "#bcd6f2"}
-flags: {foreground: "#cbd2ff"}
+punctuation:        {foreground: "#9a9aa3"}
+date:               {foreground: "#baa6ad"}
+inode:              {foreground: "#9a9aa3"}
+blocks:             {foreground: "#9a9aa3"}
+header:             {foreground: "#6f6f78"}
+octal:              {foreground: "#cfcfd4"}
+flags:              {foreground: "#b8b8bf"}
 
-symlink_path: {foreground: "#bcd6f2"}
-control_char: {foreground: "#cbd2ff"}
-broken_symlink: {foreground: "#f38ba8"}
-broken_path_overlay: {foreground: "#40434d"}   # overlay should be visible, not vanish
+symlink_path:       {foreground: "#cfcfd4"}
+control_char:       {foreground: "#b8b8bf"}
+broken_symlink:     {foreground: "#ff77aa"}
+broken_path_overlay: {foreground: "#9a9aa3"}
+
