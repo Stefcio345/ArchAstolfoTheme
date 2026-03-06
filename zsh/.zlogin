@@ -1,1 +1,0 @@
-/home/franke/Dotfiles/zsh/.zprezto/runcoms/zlogin

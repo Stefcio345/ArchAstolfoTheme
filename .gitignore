@@ -27,3 +27,6 @@
 !icons/**
 !walker/**
 !quickshell/**
+.zcompdump*
+.zsh_history
+*.zwc
