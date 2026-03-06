@@ -1,6 +1,8 @@
-// shell.qml
 import Quickshell
+import QtQuick
+import "components"
 
-Scope {
-  Bar {}
+ShellRoot {
+    Bar {}
+    AudioPopup { id: audioPopup }
 }

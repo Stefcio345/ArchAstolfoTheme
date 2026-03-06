@@ -1,27 +1,44 @@
-// Bar.qml
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls
 import Quickshell
+import Quickshell.Services.Pipewire
+import "components"
 
-Scope {
-  // no more time object
+PanelWindow {
+    id: bar
 
-  Variants {
-    model: Quickshell.screens
+    property var popup
 
-    PanelWindow {
-      required property var modelData
-      screen: modelData
-
-      anchors {
+    anchors {
         top: true
         left: true
         right: true
-      }
-
-      implicitHeight: 30
-
-      ClockWidget {
-        anchors.centerIn: parent
-      }
     }
-  }
+
+    implicitHeight: 36
+
+
+    Rectangle {
+        anchors.fill: parent
+        radius: 14
+        color: "#1e1e2ecc"   // <-- add transparency here instead
+        border.color: "#f38ba8"
+        border.width: 2
+    }
+
+    RowLayout {
+
+        anchors.fill: parent
+        anchors.margins: 10
+        spacing: 14
+
+        Item { Layout.fillWidth: true }
+
+        AudioWidget {
+            popup: audioPopup
+        }
+
+        Item { Layout.fillWidth: true }
+    }
 }

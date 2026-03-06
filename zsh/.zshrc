@@ -21,6 +21,10 @@ HYPHEN_INSENSITIVE="true"
 ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 KEYTIMEOUT=1
+ZSH_AUTOSUGGEST_ACCEPT_WIDGETS+=(normal-word-right)
+ZSH_AUTOSUGGEST_PARTIAL_ACCEPT_WIDGETS+=(normal-right) 
+ZSH_AUTOSUGGEST_STRATEGY+=(history completion) 
+WORDCHARS=$(echo "$WORDCHARS" | tr -d '/')
 
 # Plugins (added useful ones)
 plugins=(
@@ -76,6 +80,89 @@ bindkey -M menuselect '\e' abort
 bindkey -M menuselect '\e' send-break
 bindkey '^[[A' history-beginning-search-backward
 bindkey '^[[B' history-beginning-search-forward
+
+# ---------------------------
+# Standard text editor keybinds
+# ---------------------------
+
+bindkey -e   # emacs keymap
+
+# Region highlight style
+zle_highlight=(region:bg=242)
+
+# Extend by character
+extend-left() {
+  [[ $REGION_ACTIVE -eq 0 ]] && zle set-mark-command
+  zle backward-char
+}
+extend-right() {
+  [[ $REGION_ACTIVE -eq 0 ]] && zle set-mark-command
+  zle forward-char
+}
+
+# Extend by word
+extend-word-left() {
+  [[ $REGION_ACTIVE -eq 0 ]] && zle set-mark-command
+  zle backward-word
+}
+extend-word-right() {
+  [[ $REGION_ACTIVE -eq 0 ]] && zle set-mark-command
+  zle forward-word
+}
+
+zle -N extend-left
+zle -N extend-right
+zle -N extend-word-left
+zle -N extend-word-right
+
+# Shift + Arrow
+bindkey '^[[1;2D' extend-left
+bindkey '^[[1;2C' extend-right
+
+# Ctrl + Shift + Arrow
+bindkey '^[[1;6D' extend-word-left
+bindkey '^[[1;6C' extend-word-right
+
+
+# Stop selection before normal movement
+normal-left() {
+  zle deactivate-region
+  zle backward-char
+}
+
+# Right arrow: stop selecting, then let autosuggestions handle it
+normal-right() {
+  zle deactivate-region
+  zle forward-char
+}
+
+normal-word-left() {
+  zle deactivate-region
+  zle backward-word
+}
+
+normal-word-right() {
+  zle deactivate-region
+  zle forward-word
+}
+
+zle -N normal-left
+zle -N normal-right
+zle -N normal-word-left
+zle -N normal-word-right
+
+# Arrow keys
+bindkey '^[[D' normal-left
+bindkey '^[[C' normal-right
+bindkey '^[OD'  normal-left
+bindkey '^[OC'  normal-right
+
+# Ctrl + Arrow
+bindkey '^[[1;5D' normal-word-left
+bindkey '^[[1;5C' normal-word-right
+
+bindkey '^?' backward-delete-char
+bindkey '^H' backward-kill-word
 
 # ---------------------------
 # Smart symbol replacements
