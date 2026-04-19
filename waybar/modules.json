@@ -1,0 +1,176 @@
+{
+    "custom/arch": {
+        "format": "󰣇",
+        "tooltip": true,
+        "tooltip-format": "btw"
+    },
+
+    "custom/spotify": {
+    	"exec": "/usr/bin/python3 /home/franke/Dotfiles/MediaPlayer/mediaplayer.py --player spotify",
+    	"format": "{}  ",
+    	"return-type": "json",
+    	"on-click": "playerctl -p spotify play-pause",
+        "on-scroll-up": "playerctl -p spotify next",
+        "on-scroll-down": "playerctl -p spotify previous"
+    },
+
+	"hyprland/workspaces": {
+	  "format": "{icon}",
+	  "format-icons": {
+	    "1": "一",
+	    "2": "二",
+	    "3": "三",
+	    "4": "四",
+	    "5": "五",
+	    "6": "六",
+	    "7": "七",
+	    "8": "八",
+	    "9": "九",
+	    "10": "十",
+
+	    "11": "一",
+	    "12": "二",
+	    "13": "三",
+	    "14": "四",
+	    "15": "五",
+	    "16": "六",
+	    "17": "七",
+	    "18": "八",
+	    "19": "九",
+	    "20": "十",
+
+	    "21": "一",
+	    "22": "二",
+	    "23": "三",
+	    "24": "四",
+	    "25": "五",
+	    "26": "六",
+	    "27": "七",
+	    "28": "八",
+	    "29": "九",
+	    "30": "十",
+
+		"visible": "○",
+		"default": "・",
+		"empty": "・",
+		"urgent": "⚠"
+	  },
+
+	  "all-outputs": false,
+	  "active-only": false,
+	  "persistent-workspaces": {}
+	},
+	  
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "pulseaudio": {
+        "format": "{icon}    {volume}%",
+        "format-bluetooth": "{icon} {volume}%  {format_source}",
+        "format-bluetooth-muted": "  {icon}  {format_source}",
+        "format-muted": "  {format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", "", ""]
+        },
+        "on-click": "pavucontrol"
+    },
+    "network": {
+        "format-wifi": "   {essid} ({signalStrength}%)",
+        "format-ethernet": "{ipaddr}/{cidr} ",
+        "tooltip-format": "{ifname} via {gwaddr} ",
+        "format-linked": "{ifname} (No IP) ",
+        "format-disconnected": "Disconnected ⚠",
+	"on-click": "sh ~/scripts/rofi-wifi-menu/rofi-wifi-menu.sh"
+	 
+    },
+    "cpu": {
+        "format": "  {usage}%",
+        "tooltip": true
+    },
+    "memory": {
+        "format": "  {}%",
+	"tooltip": true
+    },
+    "temperature": {
+        "interval": 10,
+        "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
+        "critical-threshold": 100,
+        "format-critical": " {temperatureC}",
+        "format": " {temperatureC}°C"
+    },
+    "hyprland/language": {
+       "format": "  {}",
+       "format-en": "EN",
+       "format-ru": "RU"
+    },
+    "battery": {
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "{icon}  {capacity}%",
+        "format-full": "{icon}  {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-alt": "{time}  {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "battery#bat2": {
+        "bat": "BAT2"
+    },
+    "clock": {
+        "format": "{:%H:%M:%S | %a %d/%m/%Y} ",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "format-alt": "{:%Y-%m-%d}",
+	"interval": 1,
+	"smooth-scrolling-threshold": 1,
+	"calendar": {
+	    "mode": "month",
+	    "on-scroll": 1,
+	    "format": {
+	        "weeks": "{:%W}"
+	    }
+	},
+	"actions": {
+	    "on-scroll-up": "shift_up",
+	    "on-scroll-down": "shift_down"
+	}
+    },
+    "tray": {
+        "icon-size": 18,
+        "spacing": 5
+    },
+    "custom/display": {
+      "return-type": "json",
+      "exec": "$XDG_CONFIG_HOME/waybar/scripts/display_status.sh",
+      "interval": 2,
+      "on-click": "$XDG_CONFIG_HOME/waybar/scripts/display_toggle.sh",
+      "tooltip": true
+    },
+    "custom/audio-toggle": {
+        "exec": "$XDG_CONFIG_HOME/waybar/scripts/audio-status.sh",
+        "interval": 2,
+        "on-click": "$XDG_CONFIG_HOME/waybar/scripts/audio-toggle.sh",
+        "format": "{}"
+    },
+	"custom/monitor-brightness": {
+	  "exec": "$XDG_CONFIG_HOME/waybar/scripts/monitor-brightness.sh",
+	  "return-type": "json",
+	  "interval": 3600,
+	  "signal": 8,
+	  "on-scroll-up": "$XDG_CONFIG_HOME/waybar/scripts/monitor-brightness.sh up && pkill -RTMIN+8 waybar",
+	  "on-scroll-down": "$XDG_CONFIG_HOME/waybar/scripts/monitor-brightness.sh down && pkill -RTMIN+8 waybar"
+	}
+}

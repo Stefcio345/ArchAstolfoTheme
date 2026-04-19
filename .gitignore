@@ -15,6 +15,7 @@
 !icons/
 !walker/
 !quickshell/
+!waybar/
 
 # Unignore their contents
 !hypr/**
@@ -27,6 +28,7 @@
 !icons/**
 !walker/**
 !quickshell/**
+!waybar/**
 .zcompdump*
 .zsh_history
 *.zwc
