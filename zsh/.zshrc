@@ -1,5 +1,7 @@
 # Path to your Oh My Zsh installation
 export ZSH="$ZDOTDIR/ohmyzsh"
+export LLMS_SERVER="https://llmsserver.jukis.pl"
+
 
 ZSH_THEME="franke"
 
@@ -18,7 +20,6 @@ setopt hist_ignore_dups
 # Better completion behavior
 CASE_SENSITIVE="false"
 HYPHEN_INSENSITIVE="true"
-ENABLE_CORRECTION="true"
 COMPLETION_WAITING_DOTS="true"
 KEYTIMEOUT=1
 ZSH_AUTOSUGGEST_ACCEPT_WIDGETS+=(normal-word-right)
@@ -30,8 +31,8 @@ WORDCHARS=$(echo "$WORDCHARS" | tr -d '/')
 plugins=(
   git
   zsh-autosuggestions
-  zsh-syntax-highlighting
   zsh-completions
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -51,9 +52,6 @@ alias hyprconfig="micro $XDG_CONFIG_HOME/hypr/hyprland.conf"
 # ---------------------------
 # Better completion styling
 # ---------------------------
-
-autoload -Uz compinit
-compinit
 
 zmodload zsh/complist
 
