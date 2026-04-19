@@ -14,12 +14,12 @@ window#waybar {
 
 /* Main bar groups */
 .modules-left,
-.modules-center,
 .modules-right {
-    margin: 8px 10px 0 10px;
+    margin: 0px 18px;
+    margin-bottom: 8px;
     padding: 3px 8px;
     background: rgba(15, 18, 28, 0.94);
-    border: 2px solid rgba(231, 146, 177, 0.72);
+    border: 4px solid rgba(231, 146, 177, 0.72);
     border-radius: 12px;
     box-shadow: 0 0 0 1px rgba(231, 146, 177, 0.05);
 }
@@ -147,7 +147,8 @@ window#waybar {
 .custom-spotify,
 #custom-media {
     border-radius: 8px;
-    padding: 0px 1px;
+    padding: 0px 10px;
+    /*background: rgba(15, 18, 28, 0.6);*/
 }
 
 /* Tray */
@@ -220,7 +221,6 @@ tooltip label {
 #custom-audio-toggle {
     padding-right: 12px;
     padding-left: 8px;
-    
     min-width: 0;
 }
 
@@ -231,4 +231,10 @@ tooltip label {
     border: none;
     background: transparent;
     font-size: 0;
+}
+
+#custom-separator {
+    color: rgba(231, 146, 177, 0.28);
+    margin: 0 0px;
+    font-weight: 600;
 }

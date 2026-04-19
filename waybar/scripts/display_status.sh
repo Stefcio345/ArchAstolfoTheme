@@ -7,18 +7,18 @@ state="UNKNOWN"
 
 case "$state" in
   MIRROR)
-    text="  Mirror"
+    text=" Mirror"
     tooltip="HDMI-A-2 mirrors HDMI-A-1"
     class="mirror"
     ;;
   EXTEND)
-    text="  Extend"
+    text=" Extend"
     tooltip="HDMI-A-1 + HDMI-A-2 extended"
     class="extend"
     ;;
   *)
     # Try a best-effort probe; if it fails, show fallback
-    text="  Displays"
+    text=" Extend"
     tooltip="Click to toggle mirror/extend"
     class="unknown"
     ;;

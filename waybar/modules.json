@@ -98,11 +98,11 @@
 	 
     },
     "cpu": {
-        "format": "  {usage}%",
+        "format": " {usage}%",
         "tooltip": true
     },
     "memory": {
-        "format": "  {}%",
+        "format": " {}%",
 	"tooltip": true
     },
     "temperature": {
@@ -111,11 +111,6 @@
         "critical-threshold": 100,
         "format-critical": " {temperatureC}",
         "format": " {temperatureC}°C"
-    },
-    "hyprland/language": {
-       "format": "  {}",
-       "format-en": "EN",
-       "format-ru": "RU"
     },
     "battery": {
         "states": {
@@ -174,5 +169,10 @@
 	  "signal": 8,
 	  "on-scroll-up": "$XDG_CONFIG_HOME/waybar/scripts/monitor-brightness.sh up && pkill -RTMIN+8 waybar",
 	  "on-scroll-down": "$XDG_CONFIG_HOME/waybar/scripts/monitor-brightness.sh down && pkill -RTMIN+8 waybar"
-	}
+	},
+	"custom/separator": {
+	    "format": "|",
+	    "interval": "once",
+	    "tooltip": false
+	},
 }

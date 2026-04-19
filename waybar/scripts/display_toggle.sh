@@ -16,8 +16,8 @@ STATE_FILE="/tmp/waybar_display_state"
 LOG_FILE="/tmp/waybar_display_toggle.log"
 
 # Adjust to your real outputs/modes
-EXTEND_1=HDMI-A-1,preferred,0x0,1
-EXTEND_2=HDMI-A-2,1920x1080@60,2560x220,1
+EXTEND_1=HDMI-A-1,2560x1440@165,1922x-350,1
+EXTEND_2=HDMI-A-2,1920x1080@60,0x0,1
 
 MIRROR_1=HDMI-A-1,preferred,0x0,1
 MIRROR_2=HDMI-A-2,highres,auto,1,mirror,HDMI-A-1
