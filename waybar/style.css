@@ -1,37 +1,30 @@
 * {
-    /* `otf-font-awesome` and SpaceMono Nerd Font are required to be installed for icons */
-    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    transition: background-color .3s ease-out;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    font-family: "Fira Sans Semibold", "SpaceMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 window#waybar {
-    background: rgba(33, 33, 33, 0.8);
-    color: #bdbdbd;
-    font-family: 
-        SpaceMono Nerd Font,
-        feather;
-    transition: background-color .5s;
+    background: transparent;
+    color: #d7d7df;
 }
 
+/* Main bar groups */
 .modules-left,
 .modules-center,
-.modules-right
-{
-    background: rgba(0, 0, 8, .7);
-    margin: 5px 10px;
-    padding: 0 5px;
-    border-radius: 15px;
+.modules-right {
+    margin: 8px 10px 0 10px;
+    padding: 3px 8px;
+    background: rgba(15, 18, 28, 0.94);
+    border: 2px solid rgba(231, 146, 177, 0.72);
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(231, 146, 177, 0.05);
 }
 
-.modules-left {
-    padding: 0;
-}
-
-.modules-center {
-    padding: 0px;
-}
-
+/* Shared module style */
 #clock,
 #battery,
 #cpu,
@@ -49,11 +42,20 @@ window#waybar {
 #scratchpad,
 #power-profiles-daemon,
 #language,
-#mpd {
-    padding: 0 10px;
-    border-radius: 15px;
+#mpd,
+#custom-display,
+#custom-monitor-brightness,
+#custom-audio-toggle,
+#custom-arch {
+    padding: 0 6px;
+    margin: 3px 3px;
+    color: #d7d7df;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 8px;
 }
 
+/* Hover */
 #clock:hover,
 #battery:hover,
 #cpu:hover,
@@ -71,63 +73,162 @@ window#waybar {
 #scratchpad:hover,
 #power-profiles-daemon:hover,
 #language:hover,
-#mpd:hover {
-    background: rgba(26, 27, 38, 0.9);
+#mpd:hover,
+#custom-display:hover,
+#custom-monitor-brightness:hover,
+#custom-audio-toggle:hover,
+#custom-arch:hover {
+    background: rgba(33, 37, 52, 0.92);
+    color: #f0b6ca;
+    border: 1px solid rgba(231, 146, 177, 0.45);
 }
-#
+
+/* Workspaces */
+#workspaces {
+    padding: 0 2px;
+}
 
 #workspaces button {
-  background: transparent;
-  font-family:
-    SpaceMono Nerd Font,
-    feather;
-  font-weight: 900;
-  font-size: 13pt;
-  color: #c0caf5;
-  border:none;
-  border-radius: 15px;
-}
-
-#workspaces button.active {
-    background: #13131d; 
-    font-weight: bold;
+    padding: 0 6px;
+    margin: 3px 3px;
+    padding-bottom: 2px;
+    min-width: 18px;
+    background: transparent;
+    color: #e792b1;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: "SpaceMono Nerd Font", "Fira Sans Semibold", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: none;
 }
 
 #workspaces button:hover {
-  background: #11111b;
-  color: #cdd6f4;
-  box-shadow: none;
+    background: rgba(33, 37, 52, 0.92);
+    color: #f4c2d3;
+    border: 1px solid rgba(231, 146, 177, 0.45);
 }
 
+#workspaces button.active {
+    background: rgba(231, 146, 177, 0.16);
+    color: #ffd3df;
+    border: 1px solid rgba(231, 146, 177, 0.75);
+}
+
+#workspaces button.urgent {
+    background: rgba(255, 107, 107, 0.18);
+    color: #ff9e9e;
+    border: 1px solid rgba(255, 107, 107, 0.7);
+}
+
+/* Arch icon */
 #custom-arch {
-    margin-left: 5px;
-    padding: 0 10px;
-    font-size: 25px;
-    transition: color .5s;
-}
-#custom-arch:hover {
-    color: #1793d1;
+    font-size: 18px;
+    padding-left: 6px;
+    padding-right: 10px;
+    color: #e792b1;
 }
 
+/* Clock */
+#clock {
+    color: #f0b6ca;
+    font-weight: 700;
+    padding-right: 1px;
+}
+
+/* Audio / media */
+#pulseaudio,
+#wireplumber,
+#custom-media,
 .custom-spotify {
-    padding: 0 10px;
-    background-color: #ababab;
-    color: black;
-    border-radius: 15px;
+    color: #d7d7df;
 }
 
-#custom-display.mirror { color: #66bb6a; }  /* green-ish */
-#custom-display.extend { color: #42a5f5; }  /* blue-ish */
-#custom-display.unknown { color: #fbc02d; } /* amber */
-
-#custom-monitor_brightness.low {
-  color: #d08770;
+.custom-spotify,
+#custom-media {
+    border-radius: 8px;
+    padding: 0px 1px;
 }
 
-#custom-monitor_brightness.medium {
-  color: #ebcb8b;
+/* Tray */
+#tray {
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
-#custom-monitor_brightness.high {
-  color: #a3be8c;
+/* State colors */
+#battery.charging {
+    color: #f0b6ca;
+}
+
+#battery.warning,
+#temperature.warning {
+    color: #f3d98b;
+}
+
+#battery.critical,
+#temperature.critical,
+#network.disconnected{
+    color: #ff8fa3;
+}
+
+#pulseaudio.muted,
+#wireplumber.muted {
+    color: #7f8490;
+}
+
+#idle_inhibitor.activated {
+    color: #f0b6ca;
+}
+
+/* Custom display mode */
+#custom-display.mirror {
+    color: #f0b6ca;
+}
+
+#custom-display.extend {
+    color: #e792b1;
+}
+
+#custom-display.unknown {
+    color: #f3d98b;
+}
+
+#custom
+
+/* Brightness */
+#custom-monitor-brightness.medium {
+    color: #d7d7df;
+}
+
+#custom-monitor-brightness.high {
+    color: #f0b6ca;
+}
+
+/* Tooltips */
+tooltip {
+    background: rgba(15, 18, 28, 0.98);
+    color: #d7d7df;
+    border-radius: 10px;
+    border: 2px solid rgba(231, 146, 177, 0.72);
+}
+
+tooltip label {
+    padding: 4px 8px;
+}
+
+#custom-audio-toggle {
+    padding-right: 12px;
+    padding-left: 8px;
+    
+    min-width: 0;
+}
+
+#custom-spotify.hidden {
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    font-size: 0;
 }

@@ -5,14 +5,16 @@
         "tooltip-format": "btw"
     },
 
-    "custom/spotify": {
-    	"exec": "/usr/bin/python3 /home/franke/Dotfiles/MediaPlayer/mediaplayer.py --player spotify",
-    	"format": "{}  ",
-    	"return-type": "json",
-    	"on-click": "playerctl -p spotify play-pause",
-        "on-scroll-up": "playerctl -p spotify next",
-        "on-scroll-down": "playerctl -p spotify previous"
-    },
+	"custom/spotify": {
+	    "exec": "/usr/bin/python3 /home/franke/Dotfiles/MediaPlayer/mediaplayer.py --player spotify",
+	    "return-type": "json",
+	    "format": "{}",
+	    "max-length": 40,
+	    "escape": false,
+	    "on-click": "playerctl -p spotify play-pause",
+	    "on-scroll-up": "playerctl -p spotify next",
+	    "on-scroll-down": "playerctl -p spotify previous"
+	},
 
 	"hyprland/workspaces": {
 	  "format": "{icon}",
@@ -69,7 +71,7 @@
         }
     },
     "pulseaudio": {
-        "format": "{icon}    {volume}%",
+        "format": "{icon}  {volume}%",
         "format-bluetooth": "{icon} {volume}%  {format_source}",
         "format-bluetooth-muted": "  {icon}  {format_source}",
         "format-muted": "  {format_source}",
