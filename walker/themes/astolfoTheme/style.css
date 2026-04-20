@@ -1,41 +1,43 @@
 /* =========================================================
-   PINK SOFT-GLOW THEME — cohesive, no blue, subtle motion
+   WALKER — matched to Waybar rose/dark theme
    ========================================================= */
 
 /* ================= CORE PALETTE ================= */
 
-@define-color window_bg_color #111118;
-@define-color surface_1 #151521;
-@define-color surface_2 #1b1b29;
-@define-color surface_3 #202033;
+@define-color window_bg_color #1a1b1f;
+@define-color surface_1 #0f121c;
+@define-color surface_2 #161a26;
+@define-color surface_3 #212534;
 
-@define-color accent_bg_color #ff8fb8;
-@define-color accent_soft_color #ffb3d1;
-@define-color accent_dim_color #e06c9f;
+@define-color accent_bg_color #f38ba8;
+@define-color accent_soft_color #f0b6ca;
+@define-color accent_dim_color #c97a98;
 
-@define-color theme_fg_color #f2edf7;
-@define-color muted_fg_color #b8b0c6;
-@define-color subtle_fg_color #7e7894;
+@define-color theme_fg_color #d7d7df;
+@define-color muted_fg_color #aeb0bb;
+@define-color subtle_fg_color #7f8490;
 
-/* Kill GTK blue everywhere */
 @define-color theme_selected_bg_color @accent_bg_color;
-@define-color theme_selected_fg_color #1a0f16;
+@define-color theme_selected_fg_color #141018;
 @define-color link_color @accent_bg_color;
 @define-color visited_link_color @accent_dim_color;
 
 /* ================= SEMANTIC ================= */
 
-@define-color success_bg_color #6ee7b7;
-@define-color warning_bg_color #ffd166;
-@define-color error_bg_color #ff6b81;
-@define-color info_bg_color #8ab4ff;
+@define-color success_bg_color #a6d189;
+@define-color warning_bg_color #f3d98b;
+@define-color error_bg_color #ff8fa3;
+@define-color info_bg_color #89b4fa;
 
-@define-color error_fg_color #1a0f16;
+@define-color error_fg_color #141018;
 
 /* ================= GLOBAL ================= */
 
 * {
   color: @theme_fg_color;
+  font-family: "JetBrainsMono Nerd Font", "SpaceMono Nerd Font", monospace;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 *:selected,
@@ -43,51 +45,31 @@ selection,
 .view:selected,
 row:selected,
 label:selected {
-  background-color: alpha(@accent_bg_color, 0.22);
+  background-color: alpha(@accent_bg_color, 0.16);
   color: @theme_fg_color;
-}
-
-/* ================= ANIMATION ================= */
-
-@keyframes soft-glow {
-  0% {
-    box-shadow: 0 0 30px alpha(@accent_bg_color, 0.12);
-  }
-  50% {
-    box-shadow: 0 0 50px alpha(@accent_bg_color, 0.22);
-  }
-  100% {
-    box-shadow: 0 0 30px alpha(@accent_bg_color, 0.12);
-  }
 }
 
 /* ================= MAIN WRAPPER ================= */
 
 .box-wrapper {
-  background: linear-gradient(
-    180deg,
-    #141420 0%,
-    #101018 100%
-  );
-
-  padding: 22px;
-  border-radius: 20px;
-  border: 4px solid alpha(@accent_bg_color, 0.55);
+  background: alpha(@surface_1, 0.96);
+  padding: 16px;
+  border-radius: 12px;
+  border: 4px solid alpha(@accent_bg_color, 0.82);
 
   box-shadow:
-    0 0 40px alpha(@accent_bg_color, 0.18),
-    0 0 80px alpha(@accent_bg_color, 0.08);
+    0 0 0 1px alpha(@accent_bg_color, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
 /* ================= POPOVER ================= */
 
 popover {
-  background: @surface_1;
-  border: 1px solid alpha(@accent_bg_color, 0.45);
-  border-radius: 16px;
-  padding: 12px;
-
-  box-shadow: 0 0 30px alpha(@accent_bg_color, 0.15);
+  background: @surface_2;
+  border: 2px solid alpha(@accent_bg_color, 0.55);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
 }
 
 /* ================= INPUT ================= */
@@ -95,129 +77,145 @@ popover {
 .input {
   caret-color: @accent_bg_color;
   background: @surface_2;
-  padding: 12px;
-  border-radius: 14px;
-  border: 2px solid alpha(@accent_bg_color, 0.25);
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid alpha(@accent_bg_color, 0.25);
   outline: none;
-  font-size: 18px;
-  font-weight: bold;
-  
+  font-size: 13px;
+  font-weight: 700;
+
   transition:
     border 140ms ease,
     box-shadow 140ms ease,
-    background 140ms ease;
+    background 140ms ease,
+    color 140ms ease;
 }
 
 .input:hover {
-  border: 1px solid alpha(@accent_soft_color, 0.5);
   background: @surface_3;
+  border: 1px solid alpha(@accent_bg_color, 0.45);
 }
 
 .input:focus,
 .input:active {
-  border: 1px solid @accent_bg_color;
+  background: @surface_3;
+  border: 1px solid alpha(@accent_bg_color, 0.75);
   box-shadow:
-    0 0 0 1px alpha(@accent_bg_color, 0.2) inset,
-    0 0 22px alpha(@accent_bg_color, 0.2);
+    0 0 0 1px alpha(@accent_bg_color, 0.10) inset,
+    0 0 14px alpha(@accent_bg_color, 0.14);
 }
 
 .input selection {
-  background: alpha(@accent_bg_color, 0.35);
-  color: #1a0f16;
+  background: alpha(@accent_bg_color, 0.30);
+  color: #141018;
 }
 
 /* ================= BUTTONS ================= */
 
 button,
 .button {
-  background: alpha(@accent_bg_color, 0.08);
-  border: 1px solid alpha(@accent_bg_color, 0.4);
-  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
 
   transition:
     background 140ms ease,
-    box-shadow 140ms ease,
-    transform 120ms ease;
+    border 140ms ease,
+    color 140ms ease;
 }
 
 button:hover,
 .button:hover {
-  background: alpha(@accent_bg_color, 0.16);
-  box-shadow: 0 0 12px alpha(@accent_bg_color, 0.25);
-  transform: translateY(-1px);
+  background: alpha(@surface_3, 0.92);
+  border: 1px solid alpha(@accent_bg_color, 0.45);
+  color: @accent_soft_color;
 }
 
-button:active {
-  background: alpha(@accent_bg_color, 0.25);
-  transform: translateY(0);
+button:active,
+.button:active {
+  background: alpha(@accent_bg_color, 0.16);
+  border: 1px solid alpha(@accent_bg_color, 0.70);
+  color: @theme_fg_color;
 }
 
 /* ================= LIST ================= */
 
 .list {
-  background-color: alpha(@accent_bg_color, 0.06);
-  border-radius: 14px;
+  background-color: alpha(@accent_bg_color, 0.04);
+  border-radius: 10px;
+  padding: 4px;
 }
 
 /* ================= LIST ITEMS ================= */
 
 .item-box {
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 8px;
+  padding: 6px 8px;
   background-color: transparent;
+  border: 1px solid transparent;
 
   transition:
-    transform 120ms ease,
     background 120ms ease,
-    box-shadow 120ms ease;
+    border 120ms ease,
+    color 120ms ease;
 }
 
 child:hover .item-box {
-  background: alpha(@accent_soft_color, 0.08);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+  background: alpha(@surface_3, 0.92);
+  border: 1px solid alpha(@accent_bg_color, 0.45);
+  color: @accent_soft_color;
+  box-shadow: none;
 }
 
 child:selected .item-box,
 row:selected .item-box {
-  background: alpha(@accent_bg_color, 0.18);
-  border: 1px solid alpha(@accent_bg_color, 0.5);
-  box-shadow: 0 0 15px alpha(@accent_bg_color, 0.15);
+  background: alpha(@accent_bg_color, 0.16);
+  border: 1px solid alpha(@accent_bg_color, 0.75);
+  color: #ffd3df;
+  box-shadow: none;
 }
 
 /* ================= PREVIEW ================= */
 
 .preview {
   border: 1px solid alpha(@accent_bg_color, 0.35);
-  border-radius: 14px;
-  background: @surface_1;
+  border-radius: 10px;
+  background: @surface_2;
 }
 
 /* ================= KEYBINDS ================= */
 
 .keybinds {
-  padding-top: 12px;
+  padding-top: 10px;
+  margin-top: 8px;
   border-top: 1px solid alpha(@accent_bg_color, 0.15);
   font-size: 12px;
   color: @muted_fg_color;
 }
 
 .keybind-label {
-  padding: 3px 7px;
+  padding: 2px 7px;
   border-radius: 8px;
   border: 1px solid alpha(@accent_bg_color, 0.45);
   background: alpha(@accent_bg_color, 0.08);
+  color: @accent_soft_color;
 }
 
 /* ================= SCROLLBARS ================= */
 
+scrollbar {
+  background: transparent;
+}
+
 scrollbar slider {
-  background: alpha(@accent_bg_color, 0.5);
+  background: alpha(@accent_bg_color, 0.40);
   border-radius: 10px;
+  min-width: 8px;
+  min-height: 8px;
 }
 
 scrollbar slider:hover {
-  background: @accent_bg_color;
+  background: alpha(@accent_bg_color, 0.70);
 }
 
 scale slider {
@@ -231,29 +229,92 @@ scale trough {
 /* ================= STATES ================= */
 
 .error {
-  padding: 12px;
-  background: @error_bg_color;
-  color: @error_fg_color;
-  border-radius: 12px;
+  padding: 10px 12px;
+  background: alpha(@error_bg_color, 0.16);
+  color: @error_bg_color;
+  border: 1px solid alpha(@error_bg_color, 0.55);
+  border-radius: 10px;
 }
 
 .success {
-  padding: 12px;
-  background: alpha(@success_bg_color, 0.2);
-  border: 1px solid alpha(@success_bg_color, 0.5);
-  border-radius: 12px;
+  padding: 10px 12px;
+  background: alpha(@success_bg_color, 0.14);
+  color: @success_bg_color;
+  border: 1px solid alpha(@success_bg_color, 0.45);
+  border-radius: 10px;
 }
 
 .warning {
-  padding: 12px;
-  background: alpha(@warning_bg_color, 0.2);
-  border: 1px solid alpha(@warning_bg_color, 0.5);
-  border-radius: 12px;
+  padding: 10px 12px;
+  background: alpha(@warning_bg_color, 0.14);
+  color: @warning_bg_color;
+  border: 1px solid alpha(@warning_bg_color, 0.45);
+  border-radius: 10px;
 }
 
 .info {
-  padding: 12px;
-  background: alpha(@info_bg_color, 0.2);
-  border: 1px solid alpha(@info_bg_color, 0.5);
-  border-radius: 12px;
+  padding: 10px 12px;
+  background: alpha(@info_bg_color, 0.14);
+  color: @info_bg_color;
+  border: 1px solid alpha(@info_bg_color, 0.45);
+  border-radius: 10px;
 }
+
+/* ================= CLIPBOARD — compact + clean ================= */
+
+/* container cleanup */
+.clipboard box {
+  padding: 0;
+  margin: 0;
+}
+
+/* item base */
+.clipboard .item-box {
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+
+  transition:
+    background 120ms ease,
+    border 120ms ease,
+    color 120ms ease;
+}
+
+/* hover */
+.clipboard child:hover .item-box {
+  background: rgba(33, 37, 52, 0.92);
+  border: 1px solid rgba(231, 146, 177, 0.45);
+  color: #f0b6ca;
+}
+
+/* selected */
+.clipboard child:selected .item-box,
+.clipboard row:selected .item-box {
+  background: rgba(231, 146, 177, 0.16);
+  border: 1px solid rgba(231, 146, 177, 0.75);
+  color: #ffd3df;
+}
+
+/* text */
+.clipboard label {
+  font-size: 13px;
+  line-height: 1.1;
+  color: #d7d7df;
+
+  /* keep it single-line and clean */
+  white-space: nowrap;
+}
+
+/* optional: dim secondary text (if walker splits mime/info) */
+.clipboard label:nth-child(2) {
+  color: #7f8490;
+}
+
+/* icons / thumbnails */
+.clipboard image {
+  min-width: 18px;
+  min-height: 18px;
+  margin-right: 8px;
+  opacity: 0.85;
+}
+

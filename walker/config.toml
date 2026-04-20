@@ -5,10 +5,9 @@ as_window = false               # launch walker as a regular window instead of l
 single_click_activation = true  # activate items with a single click opposed to a double click
 selection_wrap = false          # wrap list if at bottom or top
 global_argument_delimiter = "#" # query: firefox#https://benz.dev => part after delimiter will be ignored when querying. this should be the same as in the elephant config
-exact_search_prefix = "'"       # disable fuzzy searching
 theme = "astolfoTheme"               # theme to use
 disable_mouse = false           # disable mouse (on input and list only)
-debug = false                   # enables debug printing for some stuff, f.e. keybinds
+debug = true                   # enables debug printing for some stuff, f.e. keybinds
 page_jump_items = 10            # number of items to skip with Page Up/Down
 hide_quick_activation = false   # globally hide the quick activation buttons
 hide_action_hints = true       # globally hide the action hints
@@ -55,12 +54,17 @@ calc = true
 websearch = true
 empty = ["desktopapplications"] # providers to be queried when query is empty
 ignore_preview = [] # providers that should not show previews
-max_results = 50 # global max results
+max_results = 20 # global max results
 
 [providers.argument_delimiter] # define the argument delimiter per provider
 # runner = " "
 
 [providers.sets] # define your own defaults/empty sets of providers
+
+[providers.sets.clipboard]
+default = ["clipboard"]
+empty = ["clipboard"]
+
 [providers.max_results_provider] # define max results per provider in here
 
 [[providers.prefixes]]
@@ -256,3 +260,4 @@ bookmarks = [
 ]
 
 niriactions = [{ action = "execute", bind = "Return" }]
+
