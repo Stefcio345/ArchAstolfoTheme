@@ -44,6 +44,7 @@ unset LS_COLORS
 alias ls='eza --icons --group-directories-first --git --header --time-style "+%Y/%m/%d %H:%M"'
 alias ll='ls -l'
 alias la='ls -la'
+alias top='clear; top'
 
 alias ezaconfig="micro $XDG_CONFIG_HOME/eza/theme.yml"
 alias reload="source $XDG_CONFIG_HOME/zsh/.zshrc"
@@ -159,8 +160,29 @@ bindkey '^[OC'  normal-right
 bindkey '^[[1;5D' normal-word-left
 bindkey '^[[1;5C' normal-word-right
 
-bindkey '^?' backward-delete-char
 bindkey '^H' backward-kill-word
+
+# ---------------------------
+# SELECT and DELETE ALL
+# ---------------------------
+
+select-all() {
+  zle beginning-of-line
+  zle set-mark-command
+  zle end-of-line
+}
+zle -N select-all
+bindkey '^A' select-all
+
+backward-delete-or-region() {
+  if (( REGION_ACTIVE && CURSOR != MARK )); then
+    zle kill-region
+  else
+    zle backward-delete-char
+  fi
+}
+zle -N backward-delete-or-region
+bindkey '^?' backward-delete-or-region   # Backspace
 
 # ---------------------------
 # Smart symbol replacements

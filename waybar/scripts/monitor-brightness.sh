@@ -8,7 +8,17 @@ LAST_DDC_CALL="/tmp/monitor_brightness_ddc_last"
 DDC_COOLDOWN=0.2 # seconds
 
 init() {
-    [[ -f "$STATE_FILE" ]] || echo 50 > "$STATE_FILE"
+    local cur
+
+    if [[ ! -f "$STATE_FILE" ]]; then
+        cur="$(ddcutil getvcp 10 2>/dev/null | grep -oP 'current value = \K[0-9]+')"
+
+        if [[ "$cur" =~ ^[0-9]+$ ]]; then
+            echo "$cur" > "$STATE_FILE"
+        else
+            echo 50 > "$STATE_FILE"
+        fi
+    fi
 }
 
 get_cached_brightness() {
