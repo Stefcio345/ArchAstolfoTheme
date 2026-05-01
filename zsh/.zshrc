@@ -185,6 +185,20 @@ zle -N backward-delete-or-region
 bindkey '^?' backward-delete-or-region   # Backspace
 
 # ---------------------------
+# TYPE OVER SELECTION
+# ---------------------------
+
+self-insert-or-replace-region() {
+  if (( REGION_ACTIVE && CURSOR != MARK )); then
+    zle kill-region
+  fi
+
+  zle .self-insert
+}
+
+zle -N self-insert self-insert-or-replace-region
+
+# ---------------------------
 # Smart symbol replacements
 # ---------------------------
 
