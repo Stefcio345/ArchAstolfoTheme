@@ -81,7 +81,7 @@ def packages(args):
 def check(args):
     missing = [str(p.relative_to(ROOT)) for p, _ in mappings(args.home) if not p.exists()]
     for name in ["zsh/vendor/ohmyzsh/oh-my-zsh.sh", "hypr/lib/hyprsplit/init.lua",
-                 "kitty/astolfo-goth/header-goth.png", "kitty/astolfo-goth/winged-cross.png",
+                 "kitty/astolfo-goth/gothic-corners-v4.png", "kitty/astolfo-goth/responsive_background.py",
                  "zsh/themes/franke.zsh-theme"]:
         if not (ROOT / name).is_file():
             missing.append(name)

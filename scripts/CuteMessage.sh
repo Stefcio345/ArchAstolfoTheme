@@ -1,103 +1,15 @@
 #!/usr/bin/env zsh
 
-# Astolfo Gothic: graphic header for kitty, terminal text fallback elsewhere.
-# Custom messages still use the original printable text mode.
-local goth_header="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/header-goth.png"
-if (( $# == 0 )) && [[ -n "${KITTY_WINDOW_ID:-}" ]] && (( ${COLUMNS:-80} >= 95 )) \
-  && [[ -f "$goth_header" ]] && command -v kitten >/dev/null 2>&1; then
-  clear
-  if kitten icat --align center --fit none --stdin=no "$goth_header" 2>/dev/null; then
-    print ''
-    exit 0
-  fi
-fi
-
-# Default message
-local default_msg="♱  ♡  ♡  ( ˘ ³˘)♥  UwU~ hewwooo commander-sama~ (˶˃ᵕ˂˶) nyaaa~  ♡  ♡  ♱"
-
-# Use argument if provided, otherwise default
-local msg="${1:-$default_msg}"
-
-# Terminal width
-local width=${COLUMNS:-$(tput cols)}
-
-# Compute display width
-local msg_width
-msg_width=$(
-  MSG="$msg" python3 - <<'PY'
-import os, unicodedata
-
-s = os.environ["MSG"]
-
-def ch_width(c):
-    if unicodedata.combining(c):
-        return 0
-    if unicodedata.east_asian_width(c) in ("W", "F"):
-        return 2
-    return 1
-
-print(sum(ch_width(c) for c in s))
-PY
-)
-
-# If message is wider than terminal, take centered slice
-if (( msg_width > width )); then
-  msg=$(
-    MSG="$msg" WIDTH="$width" TOTAL="$msg_width" python3 - <<'PY'
-import os, unicodedata
-
-s = os.environ["MSG"]
-max_width = int(os.environ["WIDTH"])
-total_width = int(os.environ["TOTAL"])
-
-def ch_width(c):
-    if unicodedata.combining(c):
-        return 0
-    if unicodedata.east_asian_width(c) in ("W", "F"):
-        return 2
-    return 1
-
-# Convert string to (char, width) list
-chars = [(c, ch_width(c)) for c in s]
-
-# Calculate centered window
-start_width = (total_width - max_width) // 2
-end_width = start_width + max_width
-
-cur = 0
-out = []
-
-for c, w in chars:
-    next_cur = cur + w
-    if next_cur > start_width and cur < end_width:
-        out.append(c)
-    cur = next_cur
-
-print("".join(out))
-PY
-  )
-  msg_width=$width
-fi
-
-# Center padding (only applies if it fits)
+# A single, centered line keeps the welcome balanced at every terminal width.
+# Custom messages remain supported without bitmap headers or extra blank rows.
+local msg="${1:-♱  welcome home, commander  ♡}"
+local width=${COLUMNS:-80}
+while (( ${(m)#msg} > width - 4 && ${#msg} > 1 )); do
+  msg="${msg[1,-2]}"
+done
+local msg_width=${(m)#msg}
 local padding=$(( (width - msg_width) / 2 ))
 (( padding < 0 )) && padding=0
 
-# Separator line
-local line="${(r:${msg_width}::─:)}"
-
-clear
-printf '\e[?7l'   # disable wrap
-
-printf "%*s" $padding ""
-print -P "%F{#3a3a40}${line}%f"
-
-printf "%*s" $padding ""
-print -P "%F{#f38ba8}${msg}%f"
-
-printf "%*s" $padding ""
-print -P "%F{#3a3a40}${line}%f"
-
-print ""
-
-printf '\e[?7h'   # re-enable wrap
+printf '%*s' "$padding" ''
+printf '\e[38;2;216;180;195m%s\e[0m\n' "$msg"

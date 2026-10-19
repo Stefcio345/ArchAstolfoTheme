@@ -4,7 +4,8 @@
 
 autoload -U colors && colors
 setopt prompt_subst
-setopt transient_rprompt
+# Keep each command's timestamp in the scrollback.
+unsetopt transient_rprompt
 
 # Palette (matches your kitty/waybar vibe)
 BG_DARK="%F{#1a1b1f}"      # main background tone (used as "dark" text color here)
@@ -18,15 +19,10 @@ RESET="%f"
 
 # Git branch
 git_prompt_info() {
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
+  command git rev-parse --is-inside-work-tree &>/dev/null || return 0
   local branch
-  branch=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) || return
+  branch=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) || return 0
   echo " ${SURFACE} ${GRAY_SOFT}${branch}${RESET}"
-}
-
-# Exit status indicator (shows if last command failed)
-exit_status() {
-  [[ $? -ne 0 ]] && echo " ${PINK}✖${RESET}"
 }
 
 # Run fastfetch with a random image logo (only in interactive shells)
@@ -36,7 +32,17 @@ run_fastfetch_random_logo() {
   # Don't run inside VS Code integrated terminal
   [[ "$TERM_PROGRAM" == "vscode" ]] && return
 
-  ${XDG_CONFIG_HOME:-$HOME/.config}/scripts/CuteMessage.sh
+  # Quarter-screen terminals need their rows for the image and system text.
+  # The large greeting/footer otherwise scroll the top of the image out of view.
+  local compact=0
+  local start_row=0
+  (( ${LINES:-40} < 28 )) && compact=1
+  printf '\e[H\e[2J'
+  if (( ! compact )); then
+    "${XDG_CONFIG_HOME:-$HOME/.config}/scripts/CuteMessage.sh"
+    print ''
+    start_row=2
+  fi
 
   local dir="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/logos"
 
@@ -58,23 +64,24 @@ run_fastfetch_random_logo() {
       framed="$(python3 "$frame_script" "$FASTFETCH_LOGO")"
       [[ -n "$framed" && -f "$framed" ]] && logo_to_display="$framed"
     fi
-    fastfetch --logo "$logo_to_display" --logo-type kitty
+    if [[ -f "$frame_script" ]]; then
+      # Keep Fastfetch's parent as zsh so its shell/version detection stays true.
+      local panel_info=''
+      (( COLUMNS >= 68 )) && panel_info="$(fastfetch --logo none --pipe false)"
+      python3 "$frame_script" --panel "$logo_to_display" "$start_row" "$panel_info"
+    else
+      fastfetch --logo none
+    fi
   else
     fastfetch
   fi
 
-  # Decorator is deliberately unchanged from v1: display beneath Fastfetch.
-  local ornament="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/winged-cross.png"
-  if [[ -n "${KITTY_WINDOW_ID:-}" && -f "$ornament" ]] && command -v kitten >/dev/null 2>&1; then
-    if kitten icat --align center --fit none --stdin=no "$ornament" 2>/dev/null; then
-      return
-    fi
-  fi
-  local deco='♡  𓆩  ♱  𓆪  ♡'
-  local pad=$(( (COLUMNS - 19) / 2 ))
+  # One quiet line finishes the panel without consuming a second image block.
+  local deco='───  ♡  ♱  ♡  ───'
+  local pad=$(( (COLUMNS - ${(m)#deco}) / 2 ))
   (( pad < 0 )) && pad=0
   printf '%*s' "$pad" ''
-  print -P "%F{#aa647f}${deco}%f"
+  print -P "%F{#9e6b82}${deco}%f"
 }
 
 ###########################################
@@ -104,19 +111,40 @@ ZSH_HIGHLIGHT_STYLES[double-quoted-argument-unclosed]="fg=#d6f38b"
 ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=#8bf392"
 ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]="fg=#d6f38b"
 
+typeset -g ASTOLFO_WELCOME_PRISTINE=1
+astolfo_command_started() { typeset -g ASTOLFO_WELCOME_PRISTINE=0; }
+autoload -Uz add-zsh-hook
+add-zsh-hook preexec astolfo_command_started
+
 run_fastfetch_random_logo
 
 TRAPWINCH() {
-    [[ "$TERM_PROGRAM" == "vscode" ]] && return
-
-    printf '\e[H\e[J'
-    run_fastfetch_random_logo
-    printf '\n'
-    [[ -o zle ]] && zle reset-prompt
+    [[ "${TERM_PROGRAM:-}" == "vscode" || "${ASTOLFO_WELCOME_PRISTINE:-0}" != 1 \
+       || "${ASTOLFO_WELCOME_DRAWING:-0}" == 1 ]] && return 0
+    # Reflow only the untouched welcome screen, never a command's output.
+    if zle >/dev/null 2>&1; then
+      typeset -g ASTOLFO_WELCOME_DRAWING=1
+      zle -I
+      # Do not invoke a redisplay widget here: that consumes the invalidation
+      # and remembers the old cursor anchor before the panel is drawn.
+      run_fastfetch_random_logo
+      zle -R
+      typeset -g ASTOLFO_WELCOME_DRAWING=0
+    fi
+    return 0
 }
 
 # Prompt
-PROMPT="%{$GRAY_SOFT%}%n%{$GRAY_MUTED%}@%{$GRAY_SOFT%}%m %{$GRAY_MUTED%}%~%{$RESET%}\$(git_prompt_info)\$(exit_status)%{$RESET%}
-%{$PINK%}❯ %{$RESET%}"
+# Native status expansion reports the last command, not the Git lookup above.
+PROMPT=$'%F{#6e5265}╭─%f %F{#cfcfd4}%n %F{#d8b1c0}%3~%f$(git_prompt_info)%(?.. %F{#f38ba8}✕ %?%f)\n%F{#6e5265}╰─%F{#f38ba8}❯%f '
+RPROMPT='%F{#6e5265}♡ %F{#9a9aa3}%D{%H:%M}%f'
 
-RPROMPT="${PINK}♡ ${GRAY_MUTED}%* ${PINK}♥${RESET}"
+# Refresh while the editor still owns the command line, just before submission.
+# This records run time rather than the time the prompt first appeared.
+astolfo_command_timestamp() {
+  [[ -n "${BUFFER//[[:space:]]/}" ]] || return 0
+  zle reset-prompt
+  zle -R
+}
+autoload -Uz add-zle-hook-widget
+add-zle-hook-widget line-finish astolfo_command_timestamp

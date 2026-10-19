@@ -3,20 +3,19 @@
 
   "logo": {
     "padding": {
-    "top": 0,
-      "left": 1
+      "top": 0,
+      "left": 1,
+      "right": 3
     },
-    "width": 31
+    "width": 28
   },
 
   "display": {
-    "separator": " 󰑃  ",
+    "separator": "  ",
     "color": "#cfcfd4"
   },
 
   "modules": [
-    "break",
-
     {
       "type": "os",
       "key": "󰌢  DISTRO",

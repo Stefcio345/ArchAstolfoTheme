@@ -118,6 +118,22 @@ complete operating system image.
 
 ## Verify changes
 
+The Kitty background now uses a resize watcher to anchor the existing
+artwork's four corners in wide and portrait windows. Its generated size
+variants live in the user cache; the source artwork stays in Git. Open a
+new Kitty window once after first installing the watcher. Fastfetch sizes
+each picture using its aspect ratio and the terminal's cell dimensions;
+short terminals use a compact greeting so the image stays visible. The
+welcome is a single text line, followed by a centered image/info panel and
+a small divider. Very thin windows show just a centered picture, with no
+wrapped system text. Wider panels measure their text to keep a clear margin
+beside the corner ornament, and explicitly reserve rows for the prompt.
+Resizing redraws only the welcome screen (preserving partially typed input);
+after the first command,
+your output is preserved. The prompt shows a command's actual failure status
+and keeps the directory, Git branch and clock compact. The right-hand clock
+refreshes when a command is submitted and stays beside it in scrollback.
+
 ```sh
 ./dotfiles check
 python -m unittest discover -s tests -v
