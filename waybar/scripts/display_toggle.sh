@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+source "$(dirname -- "${BASH_SOURCE[0]}")/hardware.sh"
 
 # --- Ensure we talk to the running Hyprland instance ---
 if [ -z "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
@@ -16,11 +17,14 @@ STATE_FILE="/tmp/waybar_display_state"
 LOG_FILE="/tmp/waybar_display_toggle.log"
 
 # Adjust to your real outputs/modes
-EXTEND_1=HDMI-A-1,2560x1440@165,1922x-350,1
-EXTEND_2=HDMI-A-2,1920x1080@60,0x0,1
-
-MIRROR_1=HDMI-A-1,preferred,0x0,1
-MIRROR_2=HDMI-A-2,highres,auto,1,mirror,HDMI-A-1
+EXTEND_1=${DOTFILES_EXTEND_1:-}
+EXTEND_2=${DOTFILES_EXTEND_2:-}
+MIRROR_1=${DOTFILES_MIRROR_1:-}
+MIRROR_2=${DOTFILES_MIRROR_2:-}
+if [[ -z "$EXTEND_1" || -z "$EXTEND_2" || -z "$MIRROR_1" || -z "$MIRROR_2" ]]; then
+    notify-send "Display toggle" "Configure monitor names in waybar/local.env first."
+    exit 1
+fi
 
 log() { echo "[$(date +'%F %T')]" "$@" | tee -a "$LOG_FILE" ; }
 

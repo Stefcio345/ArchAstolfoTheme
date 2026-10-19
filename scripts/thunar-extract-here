@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+file="$1"
+dir=$(dirname -- "$file")
+
+filename=$(basename -- "$file")
+stem="${filename%.*}"
+
+tmp=$(mktemp -d --tmpdir="$dir" ".thunar-extract.XXXXXX")
+trap 'rm -rf "$tmp"' EXIT
+
+unzip -oq -- "$file" -d "$tmp"
+
+# Ignore common ZIP garbage
+rm -rf -- "$tmp/__MACOSX"
+rm -f -- "$tmp/.DS_Store"
+
+shopt -s nullglob dotglob
+entries=("$tmp"/*)
+
+# ZIP contains exactly one top-level directory
+if (( ${#entries[@]} == 1 )) && [[ -d "${entries[0]}" ]]; then
+    root="${entries[0]}"
+    root_name=$(basename -- "$root")
+    target="$dir/$root_name"
+
+    mkdir -p -- "$target"
+    cp -a -- "$root"/. "$target"/
+else
+    # Multiple things at ZIP root -> create archive-name directory
+    target="$dir/$stem"
+
+    mkdir -p -- "$target"
+    cp -a -- "$tmp"/. "$target"/
+fi

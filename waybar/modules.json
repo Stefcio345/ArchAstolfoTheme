@@ -6,7 +6,7 @@
     },
 
 	"custom/spotify": {
-	    "exec": "/usr/bin/python3 /home/franke/Dotfiles/MediaPlayer/mediaplayer.py --player spotify",
+	    "exec": "/usr/bin/python3 \"$XDG_CONFIG_HOME/MediaPlayer/mediaplayer.py\" --player spotify",
 	    "return-type": "json",
 	    "format": "{}",
 	    "max-length": 40,
@@ -94,7 +94,7 @@
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-	"on-click": "sh ~/scripts/rofi-wifi-menu/rofi-wifi-menu.sh"
+	"on-click": "kitty nmtui"
 	 
     },
     "cpu": {
@@ -109,7 +109,6 @@
     },
     "temperature": {
         "interval": 2,
-        "hwmon-path": "/sys/class/hwmon/hwmon1/temp1_input",
         "critical-threshold": 100,
         "format-critical": " {temperatureC}",
         "format": " {temperatureC}°C"

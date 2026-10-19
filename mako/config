@@ -1,0 +1,20 @@
+# ─ Appearance ─
+background-color=#0a0a0fdd
+text-color=#cccccc
+border-color=#bfbfbfee
+border-size=3
+border-radius=10
+padding=12
+margin=20
+width=400
+height=200
+anchor=bottom-center
+font=JetBrainsMono Nerd Font 12
+icons=true
+
+# ─ Behavior ─
+default-timeout=5000
+ignore-timeout=false
+max-visible=5
+layer=overlay
+output=*

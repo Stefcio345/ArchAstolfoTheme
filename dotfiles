@@ -1,0 +1,188 @@
+#!/usr/bin/env python3
+"""Restore, check, and save this Arch desktop using the Python standard library."""
+import argparse
+import datetime
+import os
+from pathlib import Path
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parent
+
+
+def run(*args, **kwargs):
+    return subprocess.run(args, check=True, cwd=ROOT, **kwargs)
+
+
+def entries(name):
+    return [line.split("#", 1)[0].strip() for line in (ROOT / name).read_text().splitlines()
+            if line.split("#", 1)[0].strip()]
+
+
+def mappings(home):
+    result = [(ROOT / p, home / ".config" / p) for p in entries("config-paths.txt")]
+    return result + [(ROOT / "zsh/.zshenv", home / ".zshenv"),
+                     (ROOT / "dotfiles", home / ".local/bin/dotfiles")]
+
+
+def install(args):
+    home = args.home.expanduser().absolute()
+    if home == Path("/"):
+        raise ValueError("Refusing to install into /; use your user home directory.")
+    links = mappings(home)
+    for source, _ in links:
+        if not source.exists():
+            raise ValueError(f"Missing restore source: {source.relative_to(ROOT)}")
+    actions = []
+    for source, destination in links:
+        if destination.resolve() == source.resolve():
+            continue
+        if destination.is_dir() and ROOT.is_relative_to(destination.resolve()):
+            raise ValueError(f"Refusing to replace a parent of this checkout: {destination}")
+        actions.append((source, destination))
+    stamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
+    backup = home / ".local/state/dotfiles/backups" / stamp
+    for source, destination in actions:
+        exists = os.path.lexists(destination)
+        print(f"{'BACKUP + ' if exists else ''}LINK {destination} -> {source}")
+        if args.dry_run:
+            continue
+        if exists:
+            saved = backup / destination.relative_to(home)
+            saved.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(destination), str(saved))
+            print(f"  saved: {saved}")
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.symlink_to(source, target_is_directory=source.is_dir())
+    if args.dry_run:
+        print("Dry run: nothing changed.")
+    else:
+        print("Installed. Log out, select the Hyprland session, and log in again.")
+        print("Use 'chsh -s /usr/bin/zsh' if zsh is not already your login shell.")
+        print("Existing files, if any, were saved under: " + str(backup))
+
+
+def packages(args):
+    native = entries("packages/arch.txt")
+    aur = entries("packages/aur.txt")
+    print("Official Arch packages:\n" + shlex.join(["sudo", "pacman", "-Syu", "--needed", *native]), flush=True)
+    if args.install:
+        if not shutil.which("pacman"):
+            raise ValueError("Package installation requires Arch Linux and pacman.")
+        run("sudo", "pacman", "-Syu", "--needed", *native)
+    print("\nAUR packages (review their PKGBUILDs before installing):\n" +
+          shlex.join(["yay", "-S", "--needed", *aur]))
+    print("\nEnable ja_JP.UTF-8, en_US.UTF-8 and pl_PL.UTF-8 in /etc/locale.gen; run sudo locale-gen.")
+
+
+def check(args):
+    missing = [str(p.relative_to(ROOT)) for p, _ in mappings(args.home) if not p.exists()]
+    for name in ["zsh/vendor/ohmyzsh/oh-my-zsh.sh", "hypr/lib/hyprsplit/init.lua",
+                 "kitty/astolfo-goth/header-goth.png", "kitty/astolfo-goth/winged-cross.png",
+                 "zsh/themes/franke.zsh-theme"]:
+        if not (ROOT / name).is_file():
+            missing.append(name)
+    if missing:
+        raise ValueError("Missing restore files: " + ", ".join(missing))
+    for p in [ROOT / "zsh/.zshenv", ROOT / "zsh/.zshrc", ROOT / "zsh/themes/franke.zsh-theme"]:
+        if shutil.which("zsh"):
+            run("zsh", "-n", str(p))
+    for p in [*ROOT.glob("scripts/*.sh"), *ROOT.glob("waybar/scripts/*.sh")]:
+        shell = "zsh" if "env zsh" in p.read_text().splitlines()[0] else "bash"
+        if shutil.which(shell):
+            run(shell, "-n", str(p))
+    print("Restore sources and available shell syntax checks passed.")
+    if shutil.which("luac"):
+        for name in ["hypr/hyprland.lua", "hypr/lib/hyprsplit/init.lua"]:
+            run("luac", "-p", str(ROOT / name))
+    if shutil.which("pacman"):
+        wanted = entries("packages/arch.txt") + entries("packages/aur.txt")
+        result = run("pacman", "-Qq", stdout=subprocess.PIPE, text=True)
+        absent = sorted(set(wanted) - set(result.stdout.splitlines()))
+        if absent:
+            print("Packages to install: " + " ".join(absent))
+        result = subprocess.run(["pacman", "-Q", "hyprland"], stdout=subprocess.PIPE, text=True)
+        print("This setup uses the Hyprland Lua API (0.55+); installed: " + result.stdout.strip())
+    pending = [str(dst) for src, dst in mappings(args.home) if dst.resolve() != src.resolve()]
+    if pending:
+        print(f"{len(pending)} restore links pending; preview with ./dotfiles install --dry-run")
+
+
+def audit_index():
+    # Inspect exactly what will be published, including manually staged files.
+    raw = run("git", "ls-files", "--stage", "-z", stdout=subprocess.PIPE).stdout
+    secret = re.compile(rb"-----BEGIN (?:OPENSSH|RSA|EC|DSA|ENCRYPTED) PRIVATE KEY-----|"
+                        rb"\bgh[pousr]_[A-Za-z0-9]{30,}\b|\bgithub_pat_[A-Za-z0-9_]{30,}\b|"
+                        rb"\bAKIA[0-9A-Z]{16}\b")
+    for record in raw.split(b"\0"):
+        if not record:
+            continue
+        metadata, encoded_path = record.split(b"\t", 1)
+        mode, object_id, stage = metadata.split()
+        path = Path(os.fsdecode(encoded_path))
+        if stage != b"0" or mode == b"160000":
+            raise ValueError(f"Unresolved merge or nonportable Git dependency: {path}")
+        if path.suffix in {".pem", ".key"} or path.name == ".env" or path.name.startswith(".env."):
+            raise ValueError(f"Credential file is staged: {path}")
+        size = int(run("git", "cat-file", "-s", object_id.decode(), stdout=subprocess.PIPE).stdout)
+        if size > 20 * 1024 * 1024:
+            raise ValueError(f"Staged file exceeds 20 MiB: {path}")
+        content = run("git", "cat-file", "blob", object_id.decode(), stdout=subprocess.PIPE).stdout
+        if secret.search(content):
+            raise ValueError(f"Possible credential in staged file: {path} (content hidden)")
+        if mode == b"120000":
+            link = Path(os.fsdecode(content))
+            if link.is_absolute() or not (ROOT / path.parent / link).resolve().is_relative_to(ROOT):
+                raise ValueError(f"Nonportable staged symlink: {path}")
+
+
+def save(args):
+    if not run("git", "branch", "--show-current", stdout=subprocess.PIPE, text=True).stdout.strip():
+        raise ValueError("Create a branch before saving from a detached checkout.")
+    run("git", "add", "-A")
+    audit_index()
+    run("git", "diff", "--cached", "--check")
+    changed = subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode
+    if changed == 1:
+        message = args.message or "Update desktop theme " + datetime.date.today().isoformat()
+        run("git", "commit", "-m", message)
+    elif changed != 0:
+        raise ValueError("Could not inspect staged changes.")
+    else:
+        print("No new changes to commit.")
+    if not args.no_push:
+        run("git", "push")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    for name, handler in [("install", install), ("check", check)]:
+        p = sub.add_parser(name)
+        p.add_argument("--home", type=Path, default=Path.home(), help="target home (also useful for restore tests)")
+        if name == "install":
+            p.add_argument("--dry-run", action="store_true")
+        p.set_defaults(handler=handler)
+    p = sub.add_parser("packages", help="print dependency commands")
+    p.add_argument("--install", action="store_true", help="install official packages with pacman")
+    p.set_defaults(handler=packages)
+    p = sub.add_parser("save", help="stage, check, commit and push theme changes")
+    p.add_argument("-m", "--message")
+    p.add_argument("--no-push", action="store_true")
+    p.set_defaults(handler=save)
+    p = sub.add_parser("audit", help="check staged contents before publishing")
+    p.set_defaults(handler=lambda args: audit_index())
+    args = parser.parse_args()
+    try:
+        args.handler(args)
+    except (ValueError, OSError, subprocess.CalledProcessError) as exc:
+        print(f"dotfiles: {exc}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

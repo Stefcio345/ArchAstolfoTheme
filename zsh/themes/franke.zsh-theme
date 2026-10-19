@@ -36,9 +36,9 @@ run_fastfetch_random_logo() {
   # Don't run inside VS Code integrated terminal
   [[ "$TERM_PROGRAM" == "vscode" ]] && return
 
-  $XDG_CONFIG_HOME/scripts/CuteMessage.sh
+  ${XDG_CONFIG_HOME:-$HOME/.config}/scripts/CuteMessage.sh
 
-  local dir="$HOME/Pictures/ZshLogos"
+  local dir="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/logos"
 
   # pick once per shell session
   if [[ -z "$FASTFETCH_LOGO" ]]; then
@@ -51,10 +51,30 @@ run_fastfetch_random_logo() {
   fi
 
   if [[ -n "$FASTFETCH_LOGO" ]]; then
-    fastfetch --logo "$FASTFETCH_LOGO" --logo-type kitty
+    local logo_to_display="$FASTFETCH_LOGO"
+    local frame_script="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/frame_logo.py"
+    if [[ -f "$frame_script" ]]; then
+      local framed
+      framed="$(python3 "$frame_script" "$FASTFETCH_LOGO")"
+      [[ -n "$framed" && -f "$framed" ]] && logo_to_display="$framed"
+    fi
+    fastfetch --logo "$logo_to_display" --logo-type kitty
   else
     fastfetch
   fi
+
+  # Decorator is deliberately unchanged from v1: display beneath Fastfetch.
+  local ornament="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/winged-cross.png"
+  if [[ -n "${KITTY_WINDOW_ID:-}" && -f "$ornament" ]] && command -v kitten >/dev/null 2>&1; then
+    if kitten icat --align center --fit none --stdin=no "$ornament" 2>/dev/null; then
+      return
+    fi
+  fi
+  local deco='♡  𓆩  ♱  𓆪  ♡'
+  local pad=$(( (COLUMNS - 19) / 2 ))
+  (( pad < 0 )) && pad=0
+  printf '%*s' "$pad" ''
+  print -P "%F{#aa647f}${deco}%f"
 }
 
 ###########################################
@@ -99,4 +119,4 @@ TRAPWINCH() {
 PROMPT="%{$GRAY_SOFT%}%n%{$GRAY_MUTED%}@%{$GRAY_SOFT%}%m %{$GRAY_MUTED%}%~%{$RESET%}\$(git_prompt_info)\$(exit_status)%{$RESET%}
 %{$PINK%}❯ %{$RESET%}"
 
-RPROMPT="${GRAY_MUTED}%*${RESET}"
+RPROMPT="${PINK}♡ ${GRAY_MUTED}%* ${PINK}♥${RESET}"

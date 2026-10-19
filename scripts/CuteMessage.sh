@@ -1,7 +1,19 @@
 #!/usr/bin/env zsh
 
+# Astolfo Gothic: graphic header for kitty, terminal text fallback elsewhere.
+# Custom messages still use the original printable text mode.
+local goth_header="${XDG_CONFIG_HOME:-$HOME/.config}/kitty/astolfo-goth/header-goth.png"
+if (( $# == 0 )) && [[ -n "${KITTY_WINDOW_ID:-}" ]] && (( ${COLUMNS:-80} >= 95 )) \
+  && [[ -f "$goth_header" ]] && command -v kitten >/dev/null 2>&1; then
+  clear
+  if kitten icat --align center --fit none --stdin=no "$goth_header" 2>/dev/null; then
+    print ''
+    exit 0
+  fi
+fi
+
 # Default message
-local default_msg="♡  ♡  ♡  ♡  ( ˘ ³˘)♥  UwU~ hewwooo commander-sama~ (˶˃ᵕ˂˶) nyaaa~  ♡  ♡  ♡  ♡"
+local default_msg="♱  ♡  ♡  ( ˘ ³˘)♥  UwU~ hewwooo commander-sama~ (˶˃ᵕ˂˶) nyaaa~  ♡  ♡  ♱"
 
 # Use argument if provided, otherwise default
 local msg="${1:-$default_msg}"

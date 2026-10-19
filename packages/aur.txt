@@ -1,0 +1,8 @@
+# Install using your AUR helper after reviewing the PKGBUILDs.
+walker
+elephant
+elephant-desktopapplications
+elephant-calc
+elephant-clipboard
+elephant-websearch
+wvkbd

@@ -1,0 +1,60 @@
+* {
+    font-family: "JetBrainsMono Nerd Font", "Fira Code", monospace;
+    font-size: 12px;
+}
+
+window, dialog, .thunar, .background {
+    background-color: #0b0b0f;
+    color: #cccccc;
+}
+
+.header-bar,
+.titlebar {
+    background-color: #121217;
+    color: #ffffff;
+    border-radius: 0px;
+}
+
+.view {
+    background-color: #0e0e12;
+    color: #dddddd;
+}
+
+.treeview,
+.thunar .standard-view,
+.thunar .side-pane {
+    background-color: #101014;
+    color: #cccccc;
+    border: none;
+}
+
+.sidebar,
+.sidebar .view {
+    background-color: #0e0e12;
+    color: #bbbbbb;
+}
+
+.sidebar row:selected,
+.view:selected {
+    background-color: rgba(150, 150, 255, 0.1);
+    color: #eeeeff;
+    border-left: 2px solid #8888ff;
+}
+
+scrollbar,
+scrollbar slider {
+    background-color: #1a1a1a;
+    border-radius: 6px;
+}
+
+scrollbar slider:hover {
+    background-color: #8888ff;
+}
+
+:selected,
+:selected:focus,
+:selected:hover {
+    background-color: rgba(200, 200, 255, 0.1);
+    color: #eeeeff;
+    text-shadow: 0 0 4px #8888ff;
+}

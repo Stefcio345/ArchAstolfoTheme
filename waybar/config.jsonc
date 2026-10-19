@@ -9,7 +9,7 @@
     "modules-left": [
         "custom/arch",
         "hyprland/workspaces",
-	"hyprland/window"
+		"hyprland/window"
     ],
     "modules-center": [
         "custom/spotify"

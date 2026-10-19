@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+<action>
+	<icon>utilities-terminal</icon>
+	<name>Open Terminal Here</name>
+	<submenu></submenu>
+	<unique-id>open-terminal-here-kitty</unique-id>
+	<command>kitty --directory %f</command>
+	<description>Open kitty terminal in the current directory</description>
+	<range></range>
+	<patterns>*</patterns>
+	<startup-notify/>
+	<directories/>
+</action>
+<action>
+	<icon>x-package-repository</icon>
+	<name>Unzip Here</name>
+	<submenu></submenu>
+	<unique-id>1748614823090824-1</unique-id>
+	<command>unzip -o %f -d %d</command>
+	<description>Extract zip archive to current folder</description>
+	<range>*</range>
+	<patterns>*.zip</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon>x-package-repository</icon>
+	<name>Unzip Here</name>
+	<submenu></submenu>
+	<unique-id>1748615200788896-2</unique-id>
+	<command>unrar x -o+ %f %d</command>
+	<description>Extract rar archive to current folder</description>
+	<range>*</range>
+	<patterns>*.rar</patterns>
+	<other-files/>
+</action>
+<action>
+	<icon>x-package-repository</icon>
+	<name>Unzip Here</name>
+	<submenu></submenu>
+	<unique-id>1748615234856268-3</unique-id>
+	<command>tar -xzf %f -C %d</command>
+	<description>Extract tar archive to current folder</description>
+	<range>*</range>
+	<patterns>*.tar</patterns>
+	<other-files/>
+</action>
+</actions>

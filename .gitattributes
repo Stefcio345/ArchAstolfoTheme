@@ -1,0 +1,3 @@
+# Keep vendored snapshots byte-for-byte identical to the recorded upstream.
+zsh/vendor/** -whitespace
+hypr/lib/** -whitespace

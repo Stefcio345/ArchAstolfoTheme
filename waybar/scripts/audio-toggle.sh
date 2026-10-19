@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/hardware.sh"
 
 get_sink_id() {
     local pattern="$1"
@@ -32,8 +33,8 @@ get_current_sink_id() {
     '
 }
 
-SPEAKER_ID=$(get_sink_id "Starship/Matisse HD Audio Controller Analog Stereo")
-HEADPHONES_ID=$(get_sink_id "PRO Analog Stereo")
+SPEAKER_ID=$(get_sink_id "${DOTFILES_SPEAKER:-Analog Stereo}")
+HEADPHONES_ID=$(get_sink_id "${DOTFILES_HEADPHONES:-Headphones}")
 CURRENT_ID=$(get_current_sink_id)
 
 [ -n "$SPEAKER_ID" ] || exit 1

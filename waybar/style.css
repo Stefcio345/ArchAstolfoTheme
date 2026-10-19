@@ -20,7 +20,7 @@ window#waybar {
     padding: 3px 8px;
     background: rgba(15, 18, 28, 0.94);
     border: 4px solid rgba(231, 146, 177, 0.72);
-    border-radius: 12px;
+    border-radius: 14px;
     box-shadow: 0 0 0 1px rgba(231, 146, 177, 0.05);
 }
 
@@ -237,4 +237,8 @@ tooltip label {
     color: rgba(231, 146, 177, 0.28);
     margin: 0 0px;
     font-weight: 600;
+}
+
+#window {
+	padding: 0px 6px;
 }

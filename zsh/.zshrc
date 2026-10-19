@@ -1,5 +1,8 @@
 # Path to your Oh My Zsh installation
-export ZSH="$ZDOTDIR/ohmyzsh"
+export ZSH="$ZDOTDIR/vendor/ohmyzsh"
+export ZSH_CUSTOM="$ZDOTDIR"
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
+zstyle ':omz:update' mode disabled
 export LLMS_SERVER="https://llmsserver.jukis.pl"
 
 
@@ -31,11 +34,10 @@ WORDCHARS=$(echo "$WORDCHARS" | tr -d '/')
 plugins=(
   git
   zsh-autosuggestions
-  zsh-completions
   zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 unset LS_COLORS
 
 #------------------------------
@@ -48,7 +50,12 @@ alias top='clear; top'
 
 alias ezaconfig="micro $XDG_CONFIG_HOME/eza/theme.yml"
 alias reload="source $XDG_CONFIG_HOME/zsh/.zshrc"
-alias hyprconfig="micro $XDG_CONFIG_HOME/hypr/hyprland.conf"
+alias hyprconfig="micro $XDG_CONFIG_HOME/hypr/hyprland.lua"
+alias zshconfig="micro $XDG_CONFIG_HOME/zsh/.zshrc"
+
+# Keep private aliases and credentials out of Git.
+[[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
+dotfiles() { "$XDG_CONFIG_HOME/dotfiles" "$@"; }
 
 # ---------------------------
 # Better completion styling

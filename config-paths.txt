@@ -1,0 +1,23 @@
+# Paths linked from ~/.config to this checkout by ./dotfiles install.
+hypr
+kitty
+zsh
+scripts
+waybar
+walker
+quickshell
+eza
+icons
+fastfetch
+mako
+gtk-3.0/settings.ini
+gtk-3.0/gtk.css
+gtk-4.0/settings.ini
+qt6ct/qt6ct.conf
+qt6ct/colors
+Thunar/uca.xml
+Thunar/accels.scm
+micro/settings.json
+micro/bindings.json
+MediaPlayer/mediaplayer.py
+wallpapers/current/wallpaper.jpg

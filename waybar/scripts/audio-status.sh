@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source "$(dirname -- "${BASH_SOURCE[0]}")/hardware.sh"
 
 CURRENT_ID=$(
     wpctl status | awk '
@@ -16,10 +17,10 @@ CURRENT_ID=$(
 )
 
 HEADPHONES_ID=$(
-    wpctl status | awk '
+    wpctl status | awk -v pattern="${DOTFILES_HEADPHONES:-Headphones}" '
         /Sinks:/ { in_sinks=1; next }
         /Sources:/ { if (in_sinks) exit }
-        in_sinks && /PRO Analog Stereo/ {
+        in_sinks && $0 ~ pattern {
             if (match($0, /[0-9]+\./)) {
                 id = substr($0, RSTART, RLENGTH)
                 sub(/\./, "", id)

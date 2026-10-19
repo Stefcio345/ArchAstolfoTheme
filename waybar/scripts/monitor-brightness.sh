@@ -1,36 +1,29 @@
 #!/usr/bin/env bash
 
 STATE_FILE="/tmp/monitor_brightness"
-BUS1=1 # Dell
-BUS2=3 # AOC
+source "$(dirname -- "${BASH_SOURCE[0]}")/hardware.sh"
+BUS1=${DOTFILES_DDC_BUS1:-}
+BUS2=${DOTFILES_DDC_BUS2:-}
 STEP=10
 LAST_DDC_CALL="/tmp/monitor_brightness_ddc_last"
 DDC_COOLDOWN=0.2 # seconds
 
 init() {
     local cur
+	cur="$(ddcutil getvcp 10 --terse 2>/dev/null | awk '$1=="VCP" && $2=="10" {print $4}')"
 
-    if [[ ! -f "$STATE_FILE" ]]; then
-        cur="$(ddcutil getvcp 10 2>/dev/null | grep -oP 'current value = \K[0-9]+')"
-
-        if [[ "$cur" =~ ^[0-9]+$ ]]; then
-            echo "$cur" > "$STATE_FILE"
-        else
-            echo 50 > "$STATE_FILE"
-        fi
+    if [[ "$cur" =~ ^[0-9]+$ ]]; then
+        echo "$cur" > "$STATE_FILE"
+    else
+        echo 50 > "$STATE_FILE"
     fi
 }
 
 get_cached_brightness() {
-    local cur=50
-    if [[ -r "$STATE_FILE" ]]; then
-        cur="$(cat "$STATE_FILE")"
-    fi
-    if [[ "$cur" =~ ^[0-9]+$ ]]; then
-        echo "$cur"
-    else
-        echo "50"
-    fi
+    [[ -f "$STATE_FILE" ]] || init
+
+    local cur="$(cat "$STATE_FILE" 2>/dev/null)"
+    [[ "$cur" =~ ^[0-9]+$ ]] && echo "$cur" || echo 50
 }
 
 can_make_ddc_call() {
@@ -63,8 +56,14 @@ queue_ddc_call() {
     (
         sleep "$DDC_COOLDOWN"
         if can_make_ddc_call; then
-            ddcutil setvcp 10 "$val" --bus="$BUS1" --noverify --sleep-multiplier 0.1 >/dev/null 2>&1
-            ddcutil setvcp 10 "$val" --bus="$BUS2" --noverify --sleep-multiplier 0.1 >/dev/null 2>&1
+            if [[ -n "$BUS1" ]]; then
+                ddcutil setvcp 10 "$val" --bus="$BUS1" --noverify --sleep-multiplier 0.1 >/dev/null 2>&1
+            else
+                ddcutil setvcp 10 "$val" --noverify --sleep-multiplier 0.1 >/dev/null 2>&1
+            fi
+            if [[ -n "$BUS2" ]]; then
+                ddcutil setvcp 10 "$val" --bus="$BUS2" --noverify --sleep-multiplier 0.1 >/dev/null 2>&1
+            fi
         fi
     ) &
     echo $! > "$pidfile"
@@ -104,18 +103,19 @@ print_status() {
     local avg icon class
     avg="$(get_cached_brightness)"
     if (( avg >= 70 )); then
-        icon="☀️"
+        icon="󰃠"   # high brightness
         class="high"
     elif (( avg >= 35 )); then
-        icon="⛅"
+        icon="󰃟"   # medium
         class="medium"
     else
-        icon="🌙"
+        icon="󰃞"   # low
         class="low"
     fi
     printf '{"text":"%s %d%%","class":"%s","percentage":%d}\n' \
         "$icon" "$avg" "$class" "$avg"
 }
+
 
 # Handle arguments
 case "$1" in
