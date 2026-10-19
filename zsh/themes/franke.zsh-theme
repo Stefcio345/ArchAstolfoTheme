@@ -112,24 +112,39 @@ ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=#8bf392"
 ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument-unclosed]="fg=#d6f38b"
 
 typeset -g ASTOLFO_WELCOME_PRISTINE=1
+typeset -g ASTOLFO_WELCOME_PENDING=0
 astolfo_command_started() { typeset -g ASTOLFO_WELCOME_PRISTINE=0; }
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec astolfo_command_started
 
-run_fastfetch_random_logo
-
 TRAPWINCH() {
-    [[ "${TERM_PROGRAM:-}" == "vscode" || "${ASTOLFO_WELCOME_PRISTINE:-0}" != 1 \
-       || "${ASTOLFO_WELCOME_DRAWING:-0}" == 1 ]] && return 0
+    [[ "${TERM_PROGRAM:-}" == "vscode" || "${ASTOLFO_WELCOME_PRISTINE:-0}" != 1 ]] && return 0
+    # A resize can interrupt Python/icat or arrive before the first editor.
+    # Remember it rather than letting the busy guard discard the final size.
+    typeset -g ASTOLFO_WELCOME_PENDING=1
+    [[ "${ASTOLFO_WELCOME_DRAWING:-0}" == 1 ]] && return 0
     # Reflow only the untouched welcome screen, never a command's output.
     if zle >/dev/null 2>&1; then
       typeset -g ASTOLFO_WELCOME_DRAWING=1
-      zle -I
-      # Do not invoke a redisplay widget here: that consumes the invalidation
-      # and remembers the old cursor anchor before the panel is drawn.
-      run_fastfetch_random_logo
-      zle -R
-      typeset -g ASTOLFO_WELCOME_DRAWING=0
+      local draw_columns draw_lines
+      {
+        while (( ASTOLFO_WELCOME_PENDING )); do
+          typeset -g ASTOLFO_WELCOME_PENDING=0
+          draw_columns=$COLUMNS
+          draw_lines=$LINES
+          zle -I
+          # Do not consume the invalidation before the panel is drawn.
+          run_fastfetch_random_logo
+          zle -R
+          # Zsh can coalesce SIGWINCH while its handler is running, without
+          # invoking this trap again. Compare the dimensions as well as flags.
+          if (( COLUMNS != draw_columns || LINES != draw_lines )); then
+            typeset -g ASTOLFO_WELCOME_PENDING=1
+          fi
+        done
+      } always {
+        typeset -g ASTOLFO_WELCOME_DRAWING=0
+      }
     fi
     return 0
 }
@@ -148,3 +163,13 @@ astolfo_command_timestamp() {
 }
 autoload -Uz add-zle-hook-widget
 add-zle-hook-widget line-finish astolfo_command_timestamp
+
+astolfo_welcome_line_init() {
+  [[ "${ASTOLFO_WELCOME_PENDING:-0}" == 1 ]] && TRAPWINCH
+  return 0
+}
+add-zle-hook-widget line-init astolfo_welcome_line_init
+
+# Install the resize handler before startup rendering: an initial tiled resize
+# can otherwise happen while Fastfetch is running, before ZLE exists.
+run_fastfetch_random_logo

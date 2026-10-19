@@ -219,6 +219,35 @@ class ShortTerminalTests(unittest.TestCase):
         self.assertIn("REFLOW", result.stdout)
         self.assertIn("BUFFER=echo not executed CURSOR=7", result.stdout)
 
+    def test_resize_during_a_draw_replays_the_latest_size_instead_of_dropping_it(self):
+        result = self.run_theme("COLUMNS=120; LINES=43; integer draws=0; "
+                                "zle() { return 0; }; "
+                                "run_fastfetch_random_logo() { "
+                                "(( draws++ )); print DRAW:$COLUMNS:$LINES; "
+                                "if (( draws == 1 )); then COLUMNS=40; LINES=21; TRAPWINCH; fi; }; "
+                                "TRAPWINCH; print BUSY:$ASTOLFO_WELCOME_DRAWING")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("DRAW:120:43", result.stdout)
+        self.assertIn("DRAW:40:21", result.stdout)
+        self.assertEqual(result.stdout.count("DRAW:"), 2)
+        self.assertIn("BUSY:0", result.stdout)
+
+    def test_resize_before_editor_starts_is_replayed_on_line_init(self):
+        result = self.run_theme("zle() { return 1; }; "
+                                "run_fastfetch_random_logo() { print DRAW; }; TRAPWINCH; "
+                                "zle() { return 0; }; astolfo_welcome_line_init")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout.count("DRAW"), 1)
+
+    def test_draw_rechecks_size_when_the_shell_coalesces_resize_signals(self):
+        result = self.run_theme("COLUMNS=120; LINES=43; integer draws=0; "
+                                "zle() { return 0; }; run_fastfetch_random_logo() { "
+                                "(( draws++ )); print DRAW:$COLUMNS:$LINES; "
+                                "if (( draws == 1 )); then COLUMNS=40; LINES=21; fi; }; TRAPWINCH")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("DRAW:40:21", result.stdout)
+        self.assertEqual(result.stdout.count("DRAW:"), 2)
+
     def test_resize_invalidates_then_refreshes_without_repositioning_old_prompt(self):
         result = self.run_theme("zle() { [[ $1 == reset-prompt ]] && print RESET; "
                                 "[[ $1 == -I ]] && print INVALIDATE; "

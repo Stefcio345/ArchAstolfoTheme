@@ -128,9 +128,10 @@ welcome is a single text line, followed by a centered image/info panel and
 a small divider. Very thin windows show just a centered picture, with no
 wrapped system text. Wider panels measure their text to keep a clear margin
 beside the corner ornament, and explicitly reserve rows for the prompt.
-Resizing redraws only the welcome screen (preserving partially typed input);
-after the first command,
-your output is preserved. The prompt shows a command's actual failure status
+Resizing redraws only the welcome screen, preserving partially typed input.
+Changes arriving during a redraw are replayed at the final size, including
+initial tiled resizes before the command-line editor starts.
+After the first command, your output is preserved. The prompt shows a command's actual failure status
 and keeps the directory, Git branch and clock compact. The right-hand clock
 refreshes when a command is submitted and stays beside it in scrollback.
 
